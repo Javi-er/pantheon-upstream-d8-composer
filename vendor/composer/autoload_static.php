@@ -14,11 +14,16 @@ class ComposerStaticInit25a0cbe1d0e5a9ed1ddbd6dec4b3beed
         '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
         'def43f6c87e4f8dfd0c9e1b1bab14fe8' => __DIR__ . '/..' . '/symfony/polyfill-iconv/bootstrap.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
-        '5a12a5271c58108e0aa33355e6ac54ea' => __DIR__ . '/..' . '/drupal/console-core/src/functions.php',
         'e7223560d890eab89cda23685e711e2c' => __DIR__ . '/..' . '/psy/psysh/src/Psy/functions.php',
+        '5a12a5271c58108e0aa33355e6ac54ea' => __DIR__ . '/..' . '/drupal/console-core/src/functions.php',
+        '952683d815ff0a7bf322b93c0be7e4e4' => __DIR__ . '/..' . '/chi-teck/drupal-code-generator/src/bootstrap.php',
     );
 
     public static $prefixLengthsPsr4 = array (
+        'p' => 
+        array (
+            'phpDocumentor\\Reflection\\' => 25,
+        ),
         'c' => 
         array (
             'cweagans\\Composer\\' => 18,
@@ -41,6 +46,10 @@ class ComposerStaticInit25a0cbe1d0e5a9ed1ddbd6dec4b3beed
             'Webmozart\\PathUtil\\' => 19,
             'Webmozart\\Assert\\' => 17,
         ),
+        'U' => 
+        array (
+            'Unish\\' => 6,
+        ),
         'T' => 
         array (
             'Twig\\' => 5,
@@ -60,7 +69,6 @@ class ComposerStaticInit25a0cbe1d0e5a9ed1ddbd6dec4b3beed
             'Symfony\\Component\\HttpFoundation\\' => 33,
             'Symfony\\Component\\Finder\\' => 25,
             'Symfony\\Component\\Filesystem\\' => 29,
-            'Symfony\\Component\\ExpressionLanguage\\' => 37,
             'Symfony\\Component\\EventDispatcher\\' => 34,
             'Symfony\\Component\\DomCrawler\\' => 29,
             'Symfony\\Component\\DependencyInjection\\' => 38,
@@ -69,7 +77,6 @@ class ComposerStaticInit25a0cbe1d0e5a9ed1ddbd6dec4b3beed
             'Symfony\\Component\\Console\\' => 26,
             'Symfony\\Component\\Config\\' => 25,
             'Symfony\\Component\\ClassLoader\\' => 30,
-            'Symfony\\Component\\Cache\\' => 24,
             'Symfony\\Component\\BrowserKit\\' => 29,
             'Symfony\\Cmf\\Component\\Routing\\' => 30,
             'Symfony\\Bridge\\PsrHttpMessage\\' => 30,
@@ -77,39 +84,49 @@ class ComposerStaticInit25a0cbe1d0e5a9ed1ddbd6dec4b3beed
         ),
         'R' => 
         array (
-            'RedBeanPHP\\' => 11,
+            'Robo\\' => 5,
         ),
         'P' => 
         array (
             'Psy\\' => 4,
-            'Psr\\SimpleCache\\' => 16,
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
-            'Psr\\Cache\\' => 10,
+            'Psr\\Container\\' => 14,
             'PhpParser\\' => 10,
         ),
         'M' => 
         array (
             'Masterminds\\' => 12,
         ),
+        'L' => 
+        array (
+            'League\\Container\\' => 17,
+        ),
+        'I' => 
+        array (
+            'Interop\\Container\\' => 18,
+        ),
         'G' => 
         array (
             'GuzzleHttp\\Psr7\\' => 16,
             'GuzzleHttp\\Promise\\' => 19,
             'GuzzleHttp\\' => 11,
+            'Grasmash\\YamlExpander\\' => 22,
+            'Grasmash\\Expander\\' => 18,
             'Goutte\\' => 7,
         ),
         'D' => 
         array (
+            'Drush\\Internal\\' => 15,
+            'Drush\\' => 6,
             'Drupal\\Driver\\' => 14,
             'Drupal\\Core\\' => 12,
-            'Drupal\\Console\\Dotenv\\' => 22,
             'Drupal\\Console\\Core\\' => 20,
             'Drupal\\Console\\Composer\\Plugin\\' => 31,
             'Drupal\\Console\\' => 15,
             'Drupal\\Component\\' => 17,
             'DrupalComposer\\DrupalScaffold\\' => 30,
-            'Dotenv\\' => 7,
+            'DrupalCodeGenerator\\' => 20,
             'Doctrine\\Instantiator\\' => 22,
             'Doctrine\\Common\\Inflector\\' => 26,
             'Doctrine\\Common\\Cache\\' => 22,
@@ -119,6 +136,8 @@ class ComposerStaticInit25a0cbe1d0e5a9ed1ddbd6dec4b3beed
         'C' => 
         array (
             'Consolidation\\OutputFormatters\\' => 31,
+            'Consolidation\\Log\\' => 18,
+            'Consolidation\\Config\\' => 21,
             'Consolidation\\AnnotatedCommand\\' => 31,
             'Composer\\Semver\\' => 16,
             'Composer\\Installers\\' => 20,
@@ -136,6 +155,12 @@ class ComposerStaticInit25a0cbe1d0e5a9ed1ddbd6dec4b3beed
     );
 
     public static $prefixDirsPsr4 = array (
+        'phpDocumentor\\Reflection\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
+            1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+            2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+        ),
         'cweagans\\Composer\\' => 
         array (
             0 => __DIR__ . '/..' . '/cweagans/composer-patches/src',
@@ -175,6 +200,10 @@ class ComposerStaticInit25a0cbe1d0e5a9ed1ddbd6dec4b3beed
         'Webmozart\\Assert\\' => 
         array (
             0 => __DIR__ . '/..' . '/webmozart/assert/src',
+        ),
+        'Unish\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/drush/drush/tests',
         ),
         'Twig\\' => 
         array (
@@ -232,10 +261,6 @@ class ComposerStaticInit25a0cbe1d0e5a9ed1ddbd6dec4b3beed
         array (
             0 => __DIR__ . '/..' . '/symfony/filesystem',
         ),
-        'Symfony\\Component\\ExpressionLanguage\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/expression-language',
-        ),
         'Symfony\\Component\\EventDispatcher\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/event-dispatcher',
@@ -268,10 +293,6 @@ class ComposerStaticInit25a0cbe1d0e5a9ed1ddbd6dec4b3beed
         array (
             0 => __DIR__ . '/..' . '/symfony/class-loader',
         ),
-        'Symfony\\Component\\Cache\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/cache',
-        ),
         'Symfony\\Component\\BrowserKit\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/browser-kit',
@@ -288,17 +309,13 @@ class ComposerStaticInit25a0cbe1d0e5a9ed1ddbd6dec4b3beed
         array (
             0 => __DIR__ . '/..' . '/stecman/symfony-console-completion/src',
         ),
-        'RedBeanPHP\\' => 
+        'Robo\\' => 
         array (
-            0 => __DIR__ . '/..' . '/gabordemooij/redbean/RedBeanPHP',
+            0 => __DIR__ . '/..' . '/consolidation/robo/src',
         ),
         'Psy\\' => 
         array (
             0 => __DIR__ . '/..' . '/psy/psysh/src/Psy',
-        ),
-        'Psr\\SimpleCache\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/psr/simple-cache/src',
         ),
         'Psr\\Log\\' => 
         array (
@@ -308,9 +325,9 @@ class ComposerStaticInit25a0cbe1d0e5a9ed1ddbd6dec4b3beed
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
-        'Psr\\Cache\\' => 
+        'Psr\\Container\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/cache/src',
+            0 => __DIR__ . '/..' . '/psr/container/src',
         ),
         'PhpParser\\' => 
         array (
@@ -319,6 +336,14 @@ class ComposerStaticInit25a0cbe1d0e5a9ed1ddbd6dec4b3beed
         'Masterminds\\' => 
         array (
             0 => __DIR__ . '/..' . '/masterminds/html5/src',
+        ),
+        'League\\Container\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/league/container/src',
+        ),
+        'Interop\\Container\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/container-interop/container-interop/src/Interop/Container',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (
@@ -332,9 +357,25 @@ class ComposerStaticInit25a0cbe1d0e5a9ed1ddbd6dec4b3beed
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
         ),
+        'Grasmash\\YamlExpander\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/grasmash/yaml-expander/src',
+        ),
+        'Grasmash\\Expander\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/grasmash/expander/src',
+        ),
         'Goutte\\' => 
         array (
             0 => __DIR__ . '/..' . '/fabpot/goutte/Goutte',
+        ),
+        'Drush\\Internal\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/drush/drush/internal-copy',
+        ),
+        'Drush\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/drush/drush/src',
         ),
         'Drupal\\Driver\\' => 
         array (
@@ -343,10 +384,6 @@ class ComposerStaticInit25a0cbe1d0e5a9ed1ddbd6dec4b3beed
         'Drupal\\Core\\' => 
         array (
             0 => __DIR__ . '/../..' . '/web/core/lib/Drupal/Core',
-        ),
-        'Drupal\\Console\\Dotenv\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/drupal/console-dotenv/src',
         ),
         'Drupal\\Console\\Core\\' => 
         array (
@@ -368,9 +405,9 @@ class ComposerStaticInit25a0cbe1d0e5a9ed1ddbd6dec4b3beed
         array (
             0 => __DIR__ . '/..' . '/drupal-composer/drupal-scaffold/src',
         ),
-        'Dotenv\\' => 
+        'DrupalCodeGenerator\\' => 
         array (
-            0 => __DIR__ . '/..' . '/vlucas/phpdotenv/src',
+            0 => __DIR__ . '/..' . '/chi-teck/drupal-code-generator/src',
         ),
         'Doctrine\\Instantiator\\' => 
         array (
@@ -395,6 +432,14 @@ class ComposerStaticInit25a0cbe1d0e5a9ed1ddbd6dec4b3beed
         'Consolidation\\OutputFormatters\\' => 
         array (
             0 => __DIR__ . '/..' . '/consolidation/output-formatters/src',
+        ),
+        'Consolidation\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/consolidation/log/src',
+        ),
+        'Consolidation\\Config\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/consolidation/config/src',
         ),
         'Consolidation\\AnnotatedCommand\\' => 
         array (
@@ -428,13 +473,6 @@ class ComposerStaticInit25a0cbe1d0e5a9ed1ddbd6dec4b3beed
     );
 
     public static $prefixesPsr0 = array (
-        'p' => 
-        array (
-            'phpDocumentor' => 
-            array (
-                0 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
-            ),
-        ),
         'o' => 
         array (
             'org\\bovigo\\vfs\\' => 
@@ -487,10 +525,6 @@ class ComposerStaticInit25a0cbe1d0e5a9ed1ddbd6dec4b3beed
         ),
         'D' => 
         array (
-            'Drush' => 
-            array (
-                0 => __DIR__ . '/..' . '/drush/drush/lib',
-            ),
             'Doctrine\\Common\\Lexer\\' => 
             array (
                 0 => __DIR__ . '/..' . '/doctrine/lexer/lib',
@@ -512,17 +546,9 @@ class ComposerStaticInit25a0cbe1d0e5a9ed1ddbd6dec4b3beed
                 0 => __DIR__ . '/..' . '/dflydev/dot-access-configuration/src',
             ),
         ),
-        'C' => 
-        array (
-            'Consolidation' => 
-            array (
-                0 => __DIR__ . '/..' . '/drush/drush/lib',
-            ),
-        ),
     );
 
     public static $classMap = array (
-        'Console_Table' => __DIR__ . '/..' . '/pear/console_table/Table.php',
         'Drupal' => __DIR__ . '/../..' . '/web/core/lib/Drupal.php',
         'DrupalFinder\\DrupalFinder' => __DIR__ . '/..' . '/webflo/drupal-finder/src/DrupalFinder.php',
         'DrupalProject\\composer\\ScriptHandler' => __DIR__ . '/../..' . '/scripts/composer/ScriptHandler.php',
