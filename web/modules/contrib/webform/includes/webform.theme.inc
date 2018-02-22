@@ -51,12 +51,12 @@ function webform_theme() {
       'variables' => ['webform' => NULL, 'source_entity' => NULL, 'webform_submission' => NULL],
     ],
 
-    'webform_preview' => [
-      'variables' => ['webform_submission' => NULL],
+    'webform_required' => [
+      'variables' => ['label' => NULL],
     ],
 
     'webform_submission' => [
-      'variables' => ['webform_submission' => NULL, 'source_entity' => NULL, 'type' => NULL],
+      'render element' => 'elements',
     ],
 
     'webform_submission_navigation' => [
@@ -64,19 +64,6 @@ function webform_theme() {
     ],
     'webform_submission_information' => [
       'variables' => ['webform_submission' => NULL, 'source_entity' => NULL, 'open' => TRUE],
-    ],
-
-    'webform_submission_html' => [
-      'variables' => ['webform_submission' => NULL, 'source_entity' => NULL, 'excluded_elements' => [], 'exclude_empty' => TRUE],
-    ],
-    'webform_submission_table' => [
-      'variables' => ['webform_submission' => NULL, 'source_entity' => NULL, 'excluded_elements' => [], 'exclude_empty' => TRUE],
-    ],
-    'webform_submission_text' => [
-      'variables' => ['webform_submission' => NULL, 'source_entity' => NULL, 'excluded_elements' => [], 'exclude_empty' => TRUE],
-    ],
-    'webform_submission_yaml' => [
-      'variables' => ['webform_submission' => NULL, 'source_entity' => NULL],
     ],
 
     'webform_element_base_html' => [
@@ -218,12 +205,10 @@ function webform_theme_registry_alter(&$theme_registry) {
  * Applies custom link attributes to local actions.
  * Custom attributes are used to open Webform UI modals.
  *
- * Issue #2897396: Add a Reference Tab to track Webform nodes.
- * @see https://www.drupal.org/node/2897396
- *
  * @see template_preprocess_menu_local_action();
  * @see \Drupal\webform\WebformEntityHandlersForm
  * @see \Drupal\webform_ui\WebformUiEntityEditForm
+ * @see https://www.drupal.org/node/2897396
  */
 function webform_preprocess_menu_local_action(&$variables) {
   $link = $variables['element']['#link'];
@@ -321,6 +306,13 @@ function webform_preprocess_fieldset(&$variables) {
   // Restructure the fieldset's legend title to include #help.
   if (isset($variables['legend']['title'])) {
     _webform_preprocess_help_title($variables['legend']['title'], $element);
+  }
+
+  // Add .js-webform-form-composite class to be used #states API.
+  // @see js/webform.states.js
+  if (isset($element['#type']) && in_array($element['#type'], ['checkboxes', 'radios'])) {
+    $variables['attributes']['class'][] = 'js-webform-type-' . $element['#type'];
+    $variables['attributes']['class'][] = 'webform-type-' . $element['#type'];
   }
 }
 
@@ -633,18 +625,25 @@ function _webform_theme_suggestions(array $variables, $hook) {
     }
   }
   else {
-    if (isset($variables['webform_submission'])) {
+    $webform = NULL;
+    $webform_submission = NULL;
+    $sanitized_view_mode = NULL;
+    if (isset($variables['elements']) || isset($variables['elements']['#webform_submission'])) {
+      /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
+      $webform_submission = $variables['elements']['#webform_submission'];
+      $webform = $webform_submission->getWebform();
+      $sanitized_view_mode = strtr($variables['elements']['#view_mode'], '.', '_');
+    }
+    elseif (isset($variables['webform_submission'])) {
       /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
       $webform_submission = $variables['webform_submission'];
       $webform = $webform_submission->getWebform();
     }
     elseif (isset($variables['webform'])) {
-        /** @var \Drupal\webform\WebformInterface $webform */
+      /** @var \Drupal\webform\WebformInterface $webform */
       $webform = $variables['webform'];
     }
-    else {
-      $webform = NULL;
-    }
+
     if ($webform) {
       $suggestions[] = $hook . '__' . $webform->id();
       if (isset($variables['handler'])) {
@@ -652,6 +651,10 @@ function _webform_theme_suggestions(array $variables, $hook) {
         $handler = $variables['handler'];
         $suggestions[] = $hook . '__' . $webform->id() . '__' . $handler->getPluginId();
         $suggestions[] = $hook . '__' . $webform->id() . '__' . $handler->getPluginId() . '__' . $handler->getHandlerId();
+      }
+      if ($sanitized_view_mode) {
+        $suggestions[] = $hook . '__' . $webform->id() . '__' . $sanitized_view_mode;
+        $suggestions[] = $hook . '__' . $sanitized_view_mode;
       }
     }
   }
@@ -739,34 +742,6 @@ function webform_theme_suggestions_webform_submission(array $variables) {
  */
 function webform_theme_suggestions_webform_submission_information(array $variables) {
   return _webform_theme_suggestions($variables, 'webform_submission_information');
-}
-
-/**
- * Implements hook_theme_suggestions_HOOK().
- */
-function webform_theme_suggestions_webform_submission_html(array $variables) {
-  return _webform_theme_suggestions($variables, 'webform_submission_html');
-}
-
-/**
- * Implements hook_theme_suggestions_HOOK().
- */
-function webform_theme_suggestions_webform_submission_table(array $variables) {
-  return _webform_theme_suggestions($variables, 'webform_submission_table');
-}
-
-/**
- * Implements hook_theme_suggestions_HOOK().
- */
-function webform_theme_suggestions_webform_submission_text(array $variables) {
-  return _webform_theme_suggestions($variables, 'webform_submission_text');
-}
-
-/**
- * Implements hook_theme_suggestions_HOOK().
- */
-function webform_theme_suggestions_webform_submission_yaml(array $variables) {
-  return _webform_theme_suggestions($variables, 'webform_submission_yaml');
 }
 
 /**

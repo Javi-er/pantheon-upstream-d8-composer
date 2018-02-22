@@ -162,27 +162,27 @@ abstract class WebformCompositeBase extends WebformElementBase {
     // Set #header.
     if (!empty($element['#multiple__header'])) {
       $element['#header'] = TRUE;
-    }
 
-    // Set #element.
-    // We don't need to get the initialized composite elements because
-    // they will be initialized, prepared, and finalize by the
-    // WebformMultiple (wrapper) element.
-    // @see \Drupal\webform\Element\WebformMultiple::processWebformMultiple
-    $element['#element'] = [];
-    $composite_elements = $this->getCompositeElements();
-    foreach (Element::children($composite_elements) as $composite_key) {
-      $composite_element = $composite_elements[$composite_key];
-      // Transfer '#{composite_key}_{property}' from main element to composite
-      // element.
-      foreach ($element as $property_key => $property_value) {
-        if (strpos($property_key, '#' . $composite_key . '__') === 0) {
-          $composite_property_key = str_replace('#' . $composite_key . '__', '#', $property_key);
-          $composite_element[$composite_property_key] = $property_value;
+      // Set #element.
+      // We don't need to get the initialized composite elements because
+      // they will be initialized, prepared, and finalize by the
+      // WebformMultiple (wrapper) element.
+      // @see \Drupal\webform\Element\WebformMultiple::processWebformMultiple
+      $element['#element'] = [];
+      $composite_elements = $this->getCompositeElements();
+      foreach (Element::children($composite_elements) as $composite_key) {
+        $composite_element = $composite_elements[$composite_key];
+        // Transfer '#{composite_key}_{property}' from main element to composite
+        // element.
+        foreach ($element as $property_key => $property_value) {
+          if (strpos($property_key, '#' . $composite_key . '__') === 0) {
+            $composite_property_key = str_replace('#' . $composite_key . '__', '#', $property_key);
+            $composite_element[$composite_property_key] = $property_value;
+          }
         }
-      }
 
-      $element['#element'][$composite_key] = $composite_element;
+        $element['#element'][$composite_key] = $composite_element;
+      }
     }
   }
 
@@ -369,6 +369,8 @@ abstract class WebformCompositeBase extends WebformElementBase {
           }
           $lines[$key]['#suffix'] = '<br />';
         }
+        // Remove the <br/> suffix from the last line.
+        unset($lines[$key]['#suffix']);
         return $lines;
     }
   }
@@ -423,7 +425,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
         'cellspacing' => 0,
         'cellpadding' => 5,
         'border' => 1,
-      ]
+      ],
     ];
   }
 
@@ -1129,7 +1131,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
       || $element_plugin->hasMultipleValues($element)
       || $element_plugin instanceof WebformElementEntityReferenceInterface
       || $element_plugin instanceof WebformComputedBase
-      || $element_plugin instanceof WebformManagedFileBase ) {
+      || $element_plugin instanceof WebformManagedFileBase) {
       return FALSE;
     }
 

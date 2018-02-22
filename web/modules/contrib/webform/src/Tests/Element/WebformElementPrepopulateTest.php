@@ -4,14 +4,13 @@ namespace Drupal\webform\Tests\Element;
 
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
-use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for webform element prepopulate.
  *
  * @group Webform
  */
-class WebformElementPrepopulateTest extends WebformTestBase {
+class WebformElementPrepopulateTest extends WebformElementTestBase {
 
   /**
    * Modules to enable.
@@ -41,7 +40,7 @@ class WebformElementPrepopulateTest extends WebformTestBase {
     $this->assertFieldByName('textfield_prepopulate', '');
     $this->assertFieldByName('files[managed_file_prepopulate]', '');
 
-    // Check 'textfield' can not be prepopulated
+    // Check 'textfield' can not be prepopulated.
     $this->drupalGet('webform/test_element_prepopulate', ['query' => ['textfield' => 'value']]);
     $this->assertNoFieldByName('textfield', 'value');
 

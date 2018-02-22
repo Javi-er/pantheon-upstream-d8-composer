@@ -9,7 +9,6 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\system\Entity\Action;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\WebformInterface;
-use Drupal\webform\Plugin\WebformHandlerInterface;
 
 /**
  * Update admin settings to reflect changes in the default settings.
@@ -122,6 +121,9 @@ function _webform_update_webform_settings() {
     }
     // Set settings.
     $data['settings'] = $settings;
+
+    // Set access.
+    $data['access'] += Webform::getDefaultAccessRules();
 
     // Save data.
     $webform_config->setData($data)->save();

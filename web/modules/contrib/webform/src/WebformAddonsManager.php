@@ -3,9 +3,7 @@
 namespace Drupal\webform;
 
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
-use Drupal\webform\Utility\WebformDialogHelper;
 
 /**
  * Webform add-ons manager.
@@ -28,7 +26,6 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
     $this->projects = $this->initProjects();
   }
 
-  /**
   /**
    * {@inheritdoc}
    */
@@ -153,6 +150,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'element',
     ];
 
+    // Element: Webform Crafty Clicks.
+    $projects['webform_craftyclicks'] = [
+      'title' => $this->t('Webform Crafty Clicks'),
+      'description' => $this->t('Adds Crafty Clicks UK postcode lookup to the Webform Address composite element.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_craftyclicks'),
+      'category' => 'element',
+    ];
+
     // Element: Webform Layout Container.
     $projects['webform_layout_container'] = [
       'title' => $this->t('Webform Layout Container'),
@@ -177,11 +182,11 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'element',
     ];
 
-    // Element: Webform Crafty Clicks.
-    $projects['webform_craftyclicks'] = [
-      'title' => $this->t('Webform Crafty Clicks'),
-      'description' => $this->t('Adds Crafty Clicks UK postcode lookup to the Webform Address composite element.'),
-      'url' => Url::fromUri('https://www.drupal.org/project/webform_craftyclicks'),
+    // Element: Webform Simple Hierarchical Select.
+    $projects['webform_shs'] = [
+      'title' => $this->t('Webform Simple Hierarchical Select'),
+      'description' => $this->t("Integrates Simple Hierarchical Select module with Webform."),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_shs'),
       'category' => 'element',
     ];
 
@@ -191,6 +196,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'description' => $this->t('Extends functionality of Webform so on wizard forms, the title of the wizard page can override the form title'),
       'url' => Url::fromUri('https://www.drupal.org/project/webform_wizard_full_title'),
       'category' => 'enhancement',
+    ];
+
+    // Integration: Webform HubSpot.
+    $projects['hubspot'] = [
+      'title' => $this->t('Webform HubSpot'),
+      'description' => $this->t('Provides HubSpot leads API integration with Drupal.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/hubspot'),
+      'category' => 'integration',
     ];
 
     // Integration: Webform iContact.
@@ -214,6 +227,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'title' => $this->t('Webform Product'),
       'description' => $this->t('Links commerce products to webform elements.'),
       'url' => Url::fromUri('https://github.com/chx/webform_product'),
+      'category' => 'integration',
+    ];
+
+    // Integrations: Webform Simplenews Handler.
+    $projects['webform_simplenews_handler'] = [
+      'title' => $this->t('Webform Simplenews Handler'),
+      'description' => $this->t('Provides a Webform Handler called "Submission Newsletter" that allows to link webform submission to one or more Simplenews newsletter subscriptions.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_simplenews_handler'),
       'category' => 'integration',
     ];
 

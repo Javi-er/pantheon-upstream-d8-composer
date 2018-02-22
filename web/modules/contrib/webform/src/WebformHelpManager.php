@@ -4,7 +4,6 @@ namespace Drupal\webform;
 
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Render\Markup;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\State\StateInterface;
@@ -249,8 +248,6 @@ class WebformHelpManager implements WebformHelpManagerInterface {
    * {@inheritdoc}
    */
   public function buildIndex() {
-    // return $this->buildAddons();
-    // return $this->buildLibraries();
     return $this->buildVideos();
   }
 
@@ -280,8 +277,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       switch ($video_display) {
         case 'dialog':
           $url = Url::fromRoute('webform.help.video', ['id' => str_replace('_', '-', $video['id'])]);
-          $image_attributes = WebformDialogHelper::getModalDialogAttributes(1000);
-          $link_attributes = WebformDialogHelper::getModalDialogAttributes(1000, $classes);
+          $image_attributes = WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_WIDE);
+          $link_attributes = WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_WIDE, $classes);
           break;
 
         case 'link':
@@ -343,7 +340,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         'border' => 0,
         'cellpadding' => 2,
         'cellspacing' => 0,
-      ]
+      ],
     ];
 
     if (!$docs) {
@@ -391,7 +388,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
             '#title' => $project['title'],
             '#url' => $project['url'],
             '#prefix' => '<dt>',
-            '#suffix' => ((isset($project['recommended'])) ? ' ★': '') . '</dt>',
+            '#suffix' => ((isset($project['recommended'])) ? ' ★' : '') . '</dt>',
           ],
           'description' => [
             '#markup' => $project['description'],
@@ -443,7 +440,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         'description' => [
           'content' => [
             '#markup' => $library['description'],
-            '#suffix' => '<br />'
+            '#suffix' => '<br />',
           ],
           'notes' => [
             '#markup' => $library['notes'] .
@@ -889,6 +886,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
 
     // Installation.
     $t_args = [
+      ':about_href' => Url::fromRoute('webform.about')->toString(),
       ':addons_href' => Url::fromRoute('webform.addons')->toString(),
       ':submodules_href' => Url::fromRoute('system.modules_list', [], ['fragment' => 'edit-modules-webform'])->toString(),
       ':libraries_href' => Url::fromRoute('webform.config.libraries')->toString(),
@@ -896,7 +894,10 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     $help['installation'] = [
       'group' => 'installation',
       'title' => $this->t('Installation'),
-      'content' => $this->t('<strong>Congratulations!</strong> You have successfully installed the Webform module. Please make sure to install additional <a href=":libraries_href">third-party libraries</a>, <a href=":submodules_href">sub-modules</a> and optional <a href=":addons_href">add-ons</a>.', $t_args),
+      'content' => '<strong>' . $this->t('Congratulations!') . '</strong> ' .
+        $this->t('You have successfully installed the Webform module.') .
+        ' ' . $this->t('Learn more about the <a href=":about_href">Webform module and Drupal</a>', $t_args) . '</br>' .
+        $this->t('Please make sure to install additional <a href=":libraries_href">third-party libraries</a>, <a href=":submodules_href">sub-modules</a> and optional <a href=":addons_href">add-ons</a>.', $t_args),
       'video_id' => 'installation',
       'message_type' => 'info',
       'message_close' => TRUE,
@@ -1058,7 +1059,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     $help['config_handlers'] = [
       'group' => 'configuration',
       'title' => $this->t('Configuration: Handlers'),
-      'content' => $this->t('The <strong>Handlers configuration</strong> page allows administrators to enable/disable handlers and configure default email settings and messages.')  . ' ' .
+      'content' => $this->t('The <strong>Handlers configuration</strong> page allows administrators to enable/disable handlers and configure default email settings and messages.') . ' ' .
         $this->t('<strong>Handlers</strong> are used to route submitted data to external applications and send notifications & confirmations.'),
       'video_id' => 'admin',
       'routes' => [
@@ -1240,7 +1241,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     // Elements.
     /**************************************************************************/
 
-    // Elements
+    // Elements.
     $help['elements'] = [
       'group' => 'elements',
       'title' => $this->t('Elements'),
@@ -1336,7 +1337,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     $help['settings_access'] = [
       'group' => 'settings',
       'title' => $this->t('Settings: Access'),
-      'content' => $this->t('The <strong>Access</strong> settings page allows an administrator to determine who can create, update, delete and purge webform submissions.'),
+      'content' => $this->t('The <strong>Access</strong> settings page allows an administrator to determine who can administer a webform and/or create, update, delete and purge webform submissions.'),
       'video_id' => 'access',
       'routes' => [
         // @see /admin/structure/webform/manage/{webform}/access

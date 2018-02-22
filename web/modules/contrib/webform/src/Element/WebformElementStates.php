@@ -25,7 +25,6 @@ class WebformElementStates extends FormElement {
     return [
       '#input' => TRUE,
       '#selector_options' => [],
-      '#selector_other' => TRUE,
       '#empty_states' => 3,
       '#process' => [
         [$class, 'processWebformStates'],
@@ -208,8 +207,7 @@ class WebformElementStates extends FormElement {
       '#type' => 'select',
       '#options' => $element['#state_options'],
       '#default_value' => $state['state'],
-      '#empty_option' => '',
-      '#empty_value' => '',
+      '#empty_option' => t('- Select -'),
       '#wrapper_attributes' => ['class' => ['webform-states-table--state']],
     ];
     $row['operator'] = [
@@ -265,23 +263,19 @@ class WebformElementStates extends FormElement {
       '#options' => $element['#selector_options'],
       '#wrapper_attributes' => ['class' => ['webform-states-table--selector']],
       '#default_value' => $condition['selector'],
-      '#empty_option' => '',
-      '#empty_value' => '',
+      '#empty_option' => t('- Select -'),
     ];
-    if ($element['#selector_other']) {
-      $row['selector']['#type'] = 'webform_select_other';
-      $row['selector']['#other__option_label'] = t('Custom selector...');
-      $row['selector']['#other__placeholder'] = t('Enter custom selector...');
+    if (!isset($element['#selector_options'][$condition['selector']])) {
+      $row['selector']['#options'][$condition['selector']] = $condition['selector'];
     }
     $row['condition'] = [
-      '#wrapper_attributes' => ['class' => ['webform-states-table--condition']]
+      '#wrapper_attributes' => ['class' => ['webform-states-table--condition']],
     ];
     $row['condition']['trigger'] = [
       '#type' => 'select',
       '#options' => $element['#trigger_options'],
       '#default_value' => $condition['trigger'],
-      '#empty_option' => '',
-      '#empty_value' => '',
+      '#empty_option' => t('- Select -'),
       '#parents' => [$element_name, 'states', $row_index , 'trigger'],
       '#wrapper_attributes' => ['class' => ['webform-states-table--trigger']],
     ];
@@ -297,11 +291,31 @@ class WebformElementStates extends FormElement {
           [$trigger_selector => ['value' => 'value']],
           'or',
           [$trigger_selector => ['value' => '!value']],
+          'or',
+          [$trigger_selector => ['value' => 'pattern']],
+          'or',
+          [$trigger_selector => ['value' => '!pattern']],
+          'or',
+          [$trigger_selector => ['value' => 'greater']],
+          'or',
+          [$trigger_selector => ['value' => 'less']],
         ],
       ],
       '#wrapper_attributes' => ['class' => ['webform-states-table--value']],
       '#parents' => [$element_name, 'states', $row_index , 'value'],
     ];
+    $row['condition']['pattern'] = [
+      '#type' => 'container',
+      'description' => ['#markup' => t('Enter a <a href=":href">regular expression</a>')],
+      '#states' => [
+        'visible' => [
+          [$trigger_selector => ['value' => 'pattern']],
+          'or',
+          [$trigger_selector => ['value' => '!pattern']],
+        ],
+      ],
+    ];
+
     $row['operations'] = static::buildOperations($table_id, $row_index, $ajax_settings);
     return $row;
   }
@@ -369,7 +383,7 @@ class WebformElementStates extends FormElement {
       'operator' => 'and',
     ];
     $values[] = [
-      'selector' => ($element['#selector_other']) ? ['select' => '', 'other' => ''] : '',
+      'selector' => '',
       'trigger' => '',
       'value' => '',
     ];
@@ -532,28 +546,40 @@ class WebformElementStates extends FormElement {
 
       foreach ($conditions as $condition_key => $condition_value) {
         if (is_string($condition_key)) {
-          $states[$index]['conditions'][] = [
-            'selector' => $condition_key,
-            'trigger' => key($condition_value),
-            'value' => reset($condition_value),
-          ];
+          $states[$index]['conditions'][] = static::getStatesArrayCondition($condition_key, $condition_value);
         }
         elseif (is_string($condition_value)) {
           $states[$index]['operator'] = $condition_value;
         }
         else {
           foreach ($condition_value as $subcondition_key => $subcondition_value) {
-            $states[$index]['conditions'][] = [
-              'selector' => $subcondition_key,
-              'trigger' => key($subcondition_value),
-              'value' => reset($subcondition_value),
-            ];
+            $states[$index]['conditions'][] = static::getStatesArrayCondition($subcondition_key, $subcondition_value);
           }
         }
       }
       $index++;
     }
     return $states;
+  }
+
+  /**
+   * Get states array condition.
+   *
+   * @param string $selector
+   *   The selector.
+   * @param array $condition
+   *   The condition.
+   *
+   * @return array
+   *   Associative array container selector, trigger, and value.
+   */
+  protected static function getStatesArrayCondition($selector, array $condition) {
+    $trigger = key($condition);
+    $value = reset($condition);
+    if (is_array($value)) {
+      return static::getStatesArrayCondition($selector, $value);
+    }
+    return ['selector' => $selector, 'trigger' => $trigger, 'value' => $value];
   }
 
   /**
@@ -568,48 +594,78 @@ class WebformElementStates extends FormElement {
   protected static function convertStatesArrayToFormApiStates(array $states_array = []) {
     $states = [];
     foreach ($states_array as $state_array) {
-      if ($state = $state_array['state']) {
-        $operator = $state_array['operator'];
-        $conditions = $state_array['conditions'];
-        if (count($conditions) === 1) {
-          $condition = reset($conditions);
-          $selector = $condition['selector'];
-          $trigger = $condition['trigger'];
+      $state = $state_array['state'];
+      if (!$state) {
+        continue;
+      }
+
+      $selector = NULL;
+      $trigger = NULL;
+      $operator = $state_array['operator'];
+      $conditions = $state_array['conditions'];
+      if (count($conditions) === 1) {
+        $condition = reset($conditions);
+        extract(static::getFormApiStatesCondition($condition));
+        $states[$state][$selector][$trigger] = $value;
+      }
+      else {
+        foreach ($state_array['conditions'] as $index => $condition) {
+          extract(static::getFormApiStatesCondition($condition));
           if ($selector && $trigger) {
-            $value = (in_array($trigger, ['value', '!value'])) ? $condition['value'] : TRUE;
-          }
-          else {
-            $value = '';
-          }
-          $states[$state][$selector][$trigger] = $value;
-        }
-        else {
-          foreach ($state_array['conditions'] as $index => $condition) {
-            $selector = $condition['selector'];
-            $trigger = $condition['trigger'];
-            $value = (in_array($trigger, ['value', '!value'])) ? $condition['value'] : TRUE;
-            if ($selector && $trigger) {
-              if ($operator == 'or' || $operator == 'xor') {
-                if ($index !== 0) {
-                  $states[$state][] = $operator;
-                }
-                $states[$state][] = [
-                  $selector => [
-                    $trigger => $value,
-                  ],
-                ];
+            if ($operator == 'or' || $operator == 'xor') {
+              if ($index !== 0) {
+                $states[$state][] = $operator;
               }
-              else {
-                $states[$state][$selector] = [
+              $states[$state][] = [
+                $selector => [
                   $trigger => $value,
-                ];
-              }
+                ],
+              ];
+            }
+            else {
+              $states[$state][$selector] = [
+                $trigger => $value,
+              ];
             }
           }
         }
       }
     }
     return $states;
+  }
+
+  /**
+   * Get FAPI states array condition.
+   *
+   * @param array $condition
+   *   The condition.
+   *
+   * @return array
+   *   Associative array container selector, trigger, and value.
+   */
+  protected static function getFormApiStatesCondition(array $condition) {
+    $selector = $condition['selector'];
+    $trigger = $condition['trigger'];
+    if ($selector && $trigger) {
+      if (in_array($trigger, ['value', '!value'])) {
+        $value = $condition['value'];
+      }
+      elseif (in_array($trigger, ['pattern', '!pattern', 'less', 'greater'])) {
+        $value = [$trigger => $condition['value']];
+        $trigger = 'value';
+      }
+      else {
+        $value = TRUE;
+      }
+    }
+    else {
+      $value = '';
+    }
+    return [
+      'selector' => $selector,
+      'trigger' => $trigger,
+      'value' => $value,
+    ];
   }
 
   /**
@@ -635,19 +691,6 @@ class WebformElementStates extends FormElement {
         ];
       }
       else {
-        // ISSUE:
-        // Select other #element_validate callback is not being triggered
-        // for conditions added add and remove callbacks.
-        //
-        // WORKAROUND:
-        // Manually process select other values.
-        if (isset($value['selector']['select'])) {
-          $selector = $value['selector']['select'];
-          if ($selector == WebformSelectOther::OTHER_OPTION) {
-            $selector = $value['selector']['other'];
-          }
-          $value['selector'] = $selector;
-        }
         $states[$index]['conditions'][] = $value;
       }
     }
@@ -766,6 +809,10 @@ class WebformElementStates extends FormElement {
       'collapsed' => t('Collapsed'),
       'value' => t('Value is'),
       '!value' => t('Value is not'),
+      'pattern' => t('Pattern'),
+      '!pattern' => t('Not Pattern'),
+      'less' => t('Less than'),
+      'greater' => t('Greater than'),
     ];
   }
 

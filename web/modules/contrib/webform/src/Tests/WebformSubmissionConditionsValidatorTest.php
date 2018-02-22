@@ -24,7 +24,14 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $testWebforms = ['test_form_states_server_required', 'test_form_states_server_wizard'];
+  protected static $testWebforms = [
+    'test_form_states_server_required',
+    'test_form_states_server_wizard',
+    'test_form_states_server_custom',
+    'test_form_states_server_comp',
+    'test_form_states_server_multiple',
+    'test_form_states_server_nested',
+  ];
 
   /**
    * {@inheritdoc}
@@ -97,6 +104,16 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     ];
     $this->postSubmission($webform, $edit);
     $this->assertRaw('required_hidden_dependent_required field is required.');
+
+    /**************************************************************************/
+    // minlength_hidden_trigger
+    /**************************************************************************/
+
+    $edit = [
+      'minlength_hidden_trigger' => TRUE,
+    ];
+    $this->postSubmission($webform, $edit);
+    $this->assertRaw('<em class="placeholder">minlength_hidden_dependent</em> cannot be less than <em class="placeholder">1</em> characters but is currently <em class="placeholder">0</em> characters long.');
 
     /**************************************************************************/
     // checkboxes_trigger.
@@ -191,6 +208,10 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     $this->postSubmission($webform, $edit);
     $this->assertRaw('likert_dependent_required field is required.');
 
+    /**************************************************************************/
+    // datelist_trigger.
+    /**************************************************************************/
+
     // Check required datelist.
     $edit = [
       'datelist_trigger[year]' => date('Y'),
@@ -203,12 +224,6 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     ];
     $this->postSubmission($webform, $edit);
     $this->assertRaw('datelist_dependent_required field is required.');
-
-    /**************************************************************************/
-    // datelist_trigger.
-    /**************************************************************************/
-
-    // No test.
 
     /**************************************************************************/
     // datetime_trigger.
@@ -279,6 +294,101 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     $this->assertRaw('state_province_b field is required.');
     $this->assertRaw('postal_code_b field is required.');
     $this->assertRaw('country_b field is required.');
+
+    /**************************************************************************/
+    // custom.
+    /**************************************************************************/
+
+    $webform = Webform::load('test_form_states_server_custom');
+
+    // Check no #states required errors.
+    $this->postSubmission($webform);
+    $this->assertRaw('New submission added to Test: Form API #states custom pattern, less, and greater condition validation');
+
+    $edit = [
+      'trigger_pattern' => 'abc',
+      'trigger_not_pattern' => 'ABC',
+      'trigger_less' => 1,
+      'trigger_greater' => 11,
+    ];
+    $this->postSubmission($webform, $edit);
+    $this->assertNoRaw('New submission added to Test: Form API #states custom pattern, less, and greater condition validation');
+    $this->assertRaw('dependent_pattern field is required.');
+    $this->assertRaw('dependent_not_pattern field is required.');
+    $this->assertRaw('dependent_less field is required.');
+    $this->assertRaw('dependent_greater field is required.');
+
+    /**************************************************************************/
+    // multiple element.
+    /**************************************************************************/
+
+    $webform = Webform::load('test_form_states_server_multiple');
+
+    $edit = [
+      'trigger_required' => TRUE,
+    ];
+    $this->postSubmission($webform, $edit);
+
+    // Check multiple error.
+    $this->assertRaw('textfield_multiple field is required.');
+
+    /**************************************************************************/
+    // composite element.
+    /**************************************************************************/
+
+    $webform = Webform::load('test_form_states_server_comp');
+
+    $edit = [
+      'webform_name_trigger' => TRUE,
+      'webform_name_multiple_trigger' => TRUE,
+      'webform_name_multiple_header_trigger' => TRUE,
+    ];
+    $this->postSubmission($webform, $edit);
+
+    // Check basic composite.
+    $this->assertRaw('First field is required.');
+    $this->assertRaw('<input data-drupal-selector="edit-webform-name-first" type="text" id="edit-webform-name-first" name="webform_name[first]" value="" size="60" maxlength="255" class="form-text error" aria-invalid="true" data-drupal-states="{&quot;required&quot;:{&quot;:input[name=\u0022webform_name_trigger\u0022]&quot;:{&quot;checked&quot;:true}}}" />');
+
+    // Check multiple composite with custom error.
+    $this->assertRaw("Custom error message for &#039;last&#039; element.");
+    $this->assertRaw('<input data-drupal-selector="edit-webform-name-multiple-items-0-item-last" type="text" id="edit-webform-name-multiple-items-0-item-last" name="webform_name_multiple[items][0][_item_][last]" value="" size="60" maxlength="255" class="form-text error" aria-invalid="true" data-drupal-states="{&quot;required&quot;:{&quot;:input[name=\u0022webform_name_multiple_trigger\u0022]&quot;:{&quot;checked&quot;:true}}}" />');
+
+    // Check multiple table composite.
+    $this->assertRaw('Last field is required.');
+    $this->assertRaw('<input data-drupal-selector="edit-webform-name-multiple-header-items-0-last" type="text" id="edit-webform-name-multiple-header-items-0-last" name="webform_name_multiple_header[items][0][last]" value="" size="60" maxlength="255" class="form-text error" aria-invalid="true" data-drupal-states="{&quot;required&quot;:{&quot;:input[name=\u0022webform_name_multiple_header_trigger\u0022]&quot;:{&quot;checked&quot;:true}}}" />');
+
+    /**************************************************************************/
+    // nested.
+    /**************************************************************************/
+
+    $webform = Webform::load('test_form_states_server_nested');
+
+    // Check sub elements.
+    $this->drupalGet('webform/test_form_states_server_nested');
+    $this->assertRaw('<input data-drupal-selector="edit-visible-textfield" type="text" id="edit-visible-textfield" name="visible_textfield" value="" size="60" maxlength="255" class="form-text" data-drupal-states="{&quot;required&quot;:{&quot;:input[name=\u0022visible_trigger\u0022]&quot;:{&quot;checked&quot;:true}}}" />');
+    $this->assertRaw('<input data-drupal-selector="edit-visible-custom-textfield" type="text" id="edit-visible-custom-textfield" name="visible_custom_textfield" value="" size="60" maxlength="255" class="form-text" data-drupal-states="{&quot;required&quot;:{&quot;:input[name=\u0022visible_trigger\u0022]&quot;:{&quot;checked&quot;:true},&quot;:input[name=\u0022visible_textfield\u0022]&quot;:{&quot;filled&quot;:true}}}" />');
+
+    // Check nested element is required.
+    $edit = [
+      'visible_trigger' => TRUE,
+    ];
+    $this->postSubmission($webform, $edit);
+    $this->assertRaw('visible_textfield field is required.');
+    $this->assertNoRaw('visible_custom_textfield field is required.');
+
+    // Check nested element is not required.
+    $edit = [];
+    $this->postSubmission($webform, $edit);
+    $this->assertNoRaw('visible_textfield field is required.');
+    $this->assertNoRaw('visible_custom_textfield field is required.');
+
+    // Check custom states element validation.
+    $edit = [
+      'visible_trigger' => TRUE,
+      'visible_textfield' => '{value}',
+    ];
+    $this->postSubmission($webform, $edit);
+    $this->assertRaw('visible_custom_textfield field is required.');
   }
 
   /**

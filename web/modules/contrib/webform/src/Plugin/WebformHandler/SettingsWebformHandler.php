@@ -177,7 +177,6 @@ class SettingsWebformHandler extends WebformHandlerBase {
       '#description' => $this->t('Enter the setting name and value as YAML.'),
       '#default_value' => $custom_settings,
       '#parents' => ['settings', 'custom'],
-      '#access' => $has_confirmation_title,
     ];
 
     // Custom settings definitions.
@@ -197,7 +196,7 @@ class SettingsWebformHandler extends WebformHandlerBase {
     $form['custom_settings']['definitions']['warning'] = [
       '#type' => 'webform_message',
       '#message_type' => 'warning',
-      '#message_message' => $this->t('All of the below webform settings can be overridden but overridding certain settings can trigger unexpected results.'),
+      '#message_message' => $this->t('All of the below webform settings can be overridden but overriding certain settings can trigger unexpected results.'),
     ];
     $form['custom_settings']['definitions']['table'] = [
       '#type' => 'table',

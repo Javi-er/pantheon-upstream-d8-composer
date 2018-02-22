@@ -142,7 +142,7 @@ class WebformSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    $route_parameters = $url->getRouteParameters();
+    $route_parameters = $url->isRouted() ? $url->getRouteParameters() : [];
     if (empty($route_parameters['webform']) && empty($route_parameters['webform_submission'])) {
       return;
     }
@@ -170,15 +170,14 @@ class WebformSubscriber implements EventSubscriberInterface {
     }
   }
 
-
   /**
    * Redirect to user login with destination and display custom message.
    *
    * @param \Symfony\Component\HttpKernel\Event\FilterResponseEvent $event
    *   The event to process.
-   * @param NULL|string $message
+   * @param null|string $message
    *   (Optional) Message to be display on user login.
-   * @param \Drupal\Core\Entity\EntityInterface|NULL $entity
+   * @param null|\Drupal\Core\Entity\EntityInterface $entity
    *   (Optional) Entity to be used when replacing tokens.
    */
   protected function redirectToLogin(FilterResponseEvent $event, $message = NULL, EntityInterface $entity = NULL) {

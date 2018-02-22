@@ -87,6 +87,21 @@ elements: |
         visible:
           ':input[name="required_hidden_trigger"]':
             checked: true
+  minlength_hidden_trigger_details:
+    '#type': details
+    '#title': minlength_hidden_trigger
+    '#open': true
+    minlength_hidden_trigger:
+      '#type': checkbox
+      '#title': minlength_hidden_trigger
+    minlength_hidden_dependent:
+      '#type': textfield
+      '#title': minlength_hidden_dependent
+      '#minlength': 1
+      '#states':
+        visible:
+          ':input[name="minlength_hidden_trigger"]':
+            checked: true
   checkboxes_trigger_details:
     '#type': details
     '#title': checkboxes_trigger
@@ -414,6 +429,7 @@ settings:
   form_reset: false
   form_disable_autocomplete: false
   form_novalidate: true
+  form_required: false
   form_unsaved: false
   form_disable_back: false
   form_submit_back: false
@@ -427,6 +443,10 @@ settings:
   submission_login: false
   submission_login_message: ''
   submission_exception_message: ''
+  submission_locked_message: ''
+  autofill: false
+  autofill_message: ''
+  autofill_excluded_elements: {  }
   wizard_progress_bar: true
   wizard_progress_pages: false
   wizard_progress_percentage: false
@@ -501,6 +521,14 @@ access:
     users: {  }
     permissions: {  }
   delete_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  administer:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  administer:
     roles: {  }
     users: {  }
     permissions: {  }
