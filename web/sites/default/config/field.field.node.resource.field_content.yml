@@ -1,0 +1,36 @@
+uuid: 955c51f0-1487-4926-8886-7bbbcdf1f112
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_content
+    - node.type.resource
+    - paragraphs.paragraphs_type.text
+  module:
+    - entity_reference_revisions
+id: node.resource.field_content
+field_name: field_content
+entity_type: node
+bundle: resource
+label: Content
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      text: text
+    target_bundles_drag_drop:
+      text:
+        enabled: true
+        weight: -7
+      text_image:
+        weight: -6
+        enabled: false
+      quote:
+        weight: -5
+        enabled: false
+field_type: entity_reference_revisions

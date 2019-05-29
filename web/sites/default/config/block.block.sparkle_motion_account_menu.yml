@@ -1,0 +1,26 @@
+uuid: b9b35fab-fb5a-4ee6-aaa8-a4a61bf89f4f
+langcode: en
+status: false
+dependencies:
+  config:
+    - system.menu.account
+  module:
+    - system
+  theme:
+    - sparkle_motion
+_core:
+  default_config_hash: GKvjUeQ68jtcwVeGJ3ceeK-JlkgeoyxP51JBPyNMK_s
+id: sparkle_motion_account_menu
+theme: sparkle_motion
+region: header
+weight: 0
+provider: null
+plugin: 'system_menu_block:account'
+settings:
+  id: 'system_menu_block:account'
+  label: 'User account menu'
+  provider: system
+  label_display: '0'
+  level: 1
+  depth: 1
+visibility: {  }

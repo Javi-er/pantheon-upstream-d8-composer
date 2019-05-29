@@ -1,0 +1,17 @@
+uuid: 08535f0e-bfee-4d54-9ba8-1f0cb7a4a9b7
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: Program
+type: program
+description: ''
+help: ''
+new_revision: false
+preview_mode: 0
+display_submitted: false

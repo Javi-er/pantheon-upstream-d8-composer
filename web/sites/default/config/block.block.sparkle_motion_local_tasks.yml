@@ -1,0 +1,22 @@
+uuid: de6d8f91-3e73-4738-8d7c-171626a343e8
+langcode: en
+status: true
+dependencies:
+  theme:
+    - sparkle_motion
+_core:
+  default_config_hash: Dd4a-1LLlXmy8GCW8krsefBs-SFZR6vJEWarby5ut8k
+id: sparkle_motion_local_tasks
+theme: sparkle_motion
+region: content
+weight: -40
+provider: null
+plugin: local_tasks_block
+settings:
+  id: local_tasks_block
+  label: Tabs
+  provider: core
+  label_display: '0'
+  primary: true
+  secondary: true
+visibility: {  }

@@ -1,0 +1,54 @@
+uuid: 857caa4d-1107-4b60-885a-0dd9605c3601
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.resource.field_content
+    - field.field.node.resource.field_image
+    - image.style.thumbnail
+    - node.type.resource
+  module:
+    - image
+    - imce
+    - paragraphs
+id: node.resource.default
+targetEntityType: node
+bundle: resource
+mode: default
+content:
+  field_content:
+    type: entity_reference_paragraphs
+    weight: 2
+    region: content
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: _none
+    third_party_settings: {  }
+  field_image:
+    type: image_image
+    weight: 1
+    region: content
+    settings:
+      preview_image_style: thumbnail
+      progress_indicator: throbber
+    third_party_settings:
+      imce:
+        enabled: true
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  path: true
+  promote: true
+  sticky: true
+  uid: true

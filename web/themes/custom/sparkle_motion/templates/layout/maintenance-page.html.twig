@@ -1,0 +1,60 @@
+{#
+/**
+ * @file
+ * Theme override to display a single Drupal page while offline.
+ *
+ * All available variables are mirrored in page.html.twig.
+ * Some may be blank but they are provided for consistency.
+ *
+ * @see template_preprocess_maintenance_page()
+ */
+#}
+<div class="layout-container">
+
+  <header role="banner" class="layout-footer">
+    <div class="siteBranding">
+    {% if site_logo %}
+      <a href="{{ path('<front>') }}" title="{{ 'Home'|t }}" rel="home" class="siteBranding-logo">
+        <img src="{{ site_logo }}" alt="{{ 'Home'|t }}" class="siteBranding-logo-image" />
+      </a>
+    {% endif %}
+    {% if site_name %}
+      <div class="siteBranding-name">
+        <a href="{{ path('<front>') }}" title="{{ 'Home'|t }}" rel="home">{{ site_name }}</a>
+      </div>
+    {% endif %}
+    {% if site_slogan %}
+      <div class="siteBranding-slogan">{{ site_slogan }}</div>
+    {% endif %}
+    </div>
+  </header>
+
+  <main role="main">
+    {% if title %}
+      <h1>{{ title }}</h1>
+    {% endif %}
+
+    {{ page.highlighted }}
+
+    {{ page.content }}
+  </main>
+
+  {% if page.sidebar_first %}
+    <aside class="layout-sidebarFirst" role="complementary">
+      {{ page.sidebar_first }}
+    </aside>{# /.layout-sidebar-first #}
+  {% endif %}
+
+  {% if page.sidebar_second %}
+    <aside class="layout-sidebarSecond" role="complementary">
+      {{ page.sidebar_second }}
+    </aside>{# /.layout-sidebar-second #}
+  {% endif %}
+
+  {% if page.footer %}
+    <footer role="contentinfo" class="layout-footer">
+      {{ page.footer }}
+    </footer>
+  {% endif %}
+
+</div>{# /.layout-container #}

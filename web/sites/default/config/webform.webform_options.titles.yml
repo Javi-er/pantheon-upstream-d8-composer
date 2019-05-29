@@ -1,0 +1,13 @@
+uuid: 96e0c470-6b4b-47cf-8de4-5bddd4adf5cb
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - webform
+_core:
+  default_config_hash: 4c0TuvKtDfzMYP0VXwiMzBeZa_BT-VoQgblY7MB12nk
+id: titles
+label: Titles
+category: Demographic
+options: "Miss: Miss\nMs: Ms\nMr: Mr\nMrs: Mrs\nDr: Dr\n"

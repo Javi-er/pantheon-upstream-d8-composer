@@ -1,0 +1,67 @@
+uuid: 977217ca-25ff-4b53-ae2d-78e5f2be344c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.person.field_image
+    - field.field.node.person.field_name_first
+    - field.field.node.person.field_name_last
+    - field.field.node.person.field_professional_title
+    - image.style.thumbnail
+    - node.type.person
+  module:
+    - image
+    - imce
+id: node.person.default
+targetEntityType: node
+bundle: person
+mode: default
+content:
+  field_image:
+    type: image_image
+    weight: 4
+    region: content
+    settings:
+      preview_image_style: thumbnail
+      progress_indicator: throbber
+    third_party_settings:
+      imce:
+        enabled: true
+  field_name_first:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_name_last:
+    type: string_textfield
+    weight: 2
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_professional_title:
+    type: string_textfield
+    weight: 3
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  path: true
+  promote: true
+  sticky: true
+  uid: true

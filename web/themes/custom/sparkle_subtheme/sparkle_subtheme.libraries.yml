@@ -1,0 +1,29 @@
+#  Global library
+global:
+  version: 1.x
+  css:
+    theme:
+      css/main.css: { weight: -1 }
+  js:
+    js/main.js: { minified: false }
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/drupalSettings
+    - sparkle_subtheme/browser-detect
+    - sparkle_subtheme/jquery.hoverIntent
+
+
+jquery.hoverIntent:
+  js:
+    js/vendor/jquery.hoverIntent.min.js: { minified: true }
+
+
+browser-detect:
+  js:
+    js/vendor/browser-detect.umd.js: { minified: false }
+
+
+accordion:
+  js:
+    js/components/accordion.behavior.js: { minified: false }

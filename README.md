@@ -1,131 +1,70 @@
-# Composer template for Drupal projects
+# Example Drops 8 Composer
 
-[![Build Status](https://travis-ci.org/drupal-composer/drupal-project.svg?branch=8.x)](https://travis-ci.org/drupal-composer/drupal-project)
+[![CircleCI](https://circleci.com/gh/pantheon-systems/example-drops-8-composer.svg?style=shield)](https://circleci.com/gh/pantheon-systems/example-drops-8-composer)
+[![Pantheon example-drops-8-composer](https://img.shields.io/badge/dashboard-drops_8-yellow.svg)](https://dashboard.pantheon.io/sites/c401fd14-f745-4e51-9af2-f30b45146a0c#dev/code) 
+[![Dev Site example-drops-8-composer](https://img.shields.io/badge/site-drops_8-blue.svg)](http://dev-example-drops-8-composer.pantheonsite.io/)
 
-This project template should provide a kickstart for managing your site
-dependencies with [Composer](https://getcomposer.org/).
+This repository is a start state for a Composer-based Drupal workflow with Pantheon. It is meant to be copied by the the [Terminus Build Tools Plugin](https://github.com/pantheon-systems/terminus-build-tools-plugin) which will set up for you a brand new
 
-If you want to know how to use it as replacement for
-[Drush Make](https://github.com/drush-ops/drush/blob/8.x/docs/make.md) visit
-the [Documentation on drupal.org](https://www.drupal.org/node/2471553).
+* GitHub repo
+* Free Pantheon sandbox site
+* A CircleCI configuration to run tests and push from the source repo (GitHub) to Pantheon.
 
-## Usage
+For more background information on this style of workflow, see the [Pantheon documentation](https://pantheon.io/docs/guides/github-pull-requests/).
 
-First you need to [install composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-osx).
 
-> Note: The instructions below refer to the [global composer installation](https://getcomposer.org/doc/00-intro.md#globally).
-You might need to replace `composer` with `php composer.phar` (or similar) 
-for your setup.
+## Installation
 
-After that you can create the project:
+### Prerequisites
+
+Before running the `terminus build:project:create` command, make sure you have all of the prerequisites:
+
+* [A Pantheon account](https://dashboard.pantheon.io/register)
+* [Terminus, the Pantheon command line tool](https://pantheon.io/docs/terminus/install/)
+* [The Terminus Build Tools Plugin](https://github.com/pantheon-systems/terminus-build-tools-plugin)
+* An account with GitHub and an authentication token capable of creating new repos.
+* An account with CircleCI and an authentication token.
+
+You may find it easier to export the GitHub and CircleCI tokens as variables on your command line where the Build Tools Plugin can detect them automatically:
 
 ```
-composer create-project drupal-composer/drupal-project:8.x-dev some-dir --stability dev --no-interaction
+export GITHUB_TOKEN=[REDACTED]
+export CIRCLE_TOKEN=[REDACTED]
 ```
 
-With `composer require ...` you can download new dependencies to your 
-installation.
+### One command setup:
+
+Once you have all of the prerequisites in place, you can create your copy of this repo with one command:
 
 ```
-cd some-dir
-composer require drupal/devel:~1.0
+terminus build:project:create pantheon-systems/example-drops-8-composer my-new-site --team="Agency Org Name"
 ```
 
-The `composer create-project` command passes ownership of all files to the 
-project that is created. You should create a new git repository, and commit 
-all files not excluded by the .gitignore file.
+The parameters shown here are:
 
-## What does the template do?
-
-When installing the given `composer.json` some tasks are taken care of:
-
-* Drupal will be installed in the `web`-directory.
-* Autoloader is implemented to use the generated composer autoloader in `vendor/autoload.php`,
-  instead of the one provided by Drupal (`web/vendor/autoload.php`).
-* Modules (packages of type `drupal-module`) will be placed in `web/modules/contrib/`
-* Theme (packages of type `drupal-theme`) will be placed in `web/themes/contrib/`
-* Profiles (packages of type `drupal-profile`) will be placed in `web/profiles/contrib/`
-* Creates default writable versions of `settings.php` and `services.yml`.
-* Creates `web/sites/default/files`-directory.
-* Latest version of drush is installed locally for use at `vendor/bin/drush`.
-* Latest version of DrupalConsole is installed locally for use at `vendor/bin/drupal`.
-
-## Updating Drupal Core
-
-This project will attempt to keep all of your Drupal Core files up-to-date; the 
-project [drupal-composer/drupal-scaffold](https://github.com/drupal-composer/drupal-scaffold) 
-is used to ensure that your scaffold files are updated every time drupal/core is 
-updated. If you customize any of the "scaffolding" files (commonly .htaccess), 
-you may need to merge conflicts if any of your modified files are updated in a 
-new release of Drupal core.
-
-Follow the steps below to update your core files.
-
-1. Run `composer update drupal/core --with-dependencies` to update Drupal Core and its dependencies.
-1. Run `git diff` to determine if any of the scaffolding files have changed. 
-   Review the files for any changes and restore any customizations to 
-  `.htaccess` or `robots.txt`.
-1. Commit everything all together in a single commit, so `web` will remain in
-   sync with the `core` when checking out branches or running `git bisect`.
-1. In the event that there are non-trivial conflicts in step 2, you may wish 
-   to perform these steps on a branch, and use `git merge` to combine the 
-   updated core files with your customized files. This facilitates the use 
-   of a [three-way merge tool such as kdiff3](http://www.gitshah.com/2010/12/how-to-setup-kdiff-as-diff-tool-for-git.html). This setup is not necessary if your changes are simple; 
-   keeping all of your modifications at the beginning or end of the file is a 
-   good strategy to keep merges easy.
-
-## Generate composer.json from existing project
-
-With using [the "Composer Generate" drush extension](https://www.drupal.org/project/composer_generate)
-you can now generate a basic `composer.json` file from an existing project. Note
-that the generated `composer.json` might differ from this project's file.
+* The name of the source repo, `pantheon-systems/example-drops-8-composer`. If you are interest in other source repos like WordPress, see the [Terminus Build Tools Plugin](https://github.com/pantheon-systems/terminus-build-tools-plugin).
+* The machine name to be used by both the soon-to-be-created Pantheon site and GitHub repo. Change `my-new-site` to something meaningful for you.
+* The `--team` flag is optional and refers to a Pantheon organization. Pantheon organizations are often web development agencies or Universities. Setting this parameter causes the newly created site to go within the given organization. Run the Terminus command `terminus org:list` to see the organizations you are a member of. There might not be any.
 
 
-## FAQ
+## Important files and directories
 
-### Should I commit the contrib modules I download?
+### `/web`
 
-Composer recommends **no**. They provide [argumentation against but also 
-workrounds if a project decides to do it anyway](https://getcomposer.org/doc/faqs/should-i-commit-the-dependencies-in-my-vendor-directory.md).
+Pantheon will serve the site from the `/web` subdirectory due to the configuration in `pantheon.yml`, facilitating a Composer based workflow. Having your website in this subdirectory also allows for tests, scripts, and other files related to your project to be stored in your repo without polluting your web document root.
 
-### Should I commit the scaffolding files?
+#### `/config`
 
-The [drupal-scaffold](https://github.com/drupal-composer/drupal-scaffold) plugin can download the scaffold files (like
-index.php, update.php, …) to the web/ directory of your project. If you have not customized those files you could choose
-to not check them into your version control system (e.g. git). If that is the case for your project it might be
-convenient to automatically run the drupal-scaffold plugin after every install or update of your project. You can
-achieve that by registering `@drupal-scaffold` as post-install and post-update command in your composer.json:
+One of the directories moved to the git root is `/config`. This directory holds Drupal's `.yml` configuration files. In more traditional repo structure these files would live at `/sites/default/config/`. Thanks to [this line in `settings.php`](https://github.com/pantheon-systems/example-drops-8-composer/blob/54c84275cafa66c86992e5232b5e1019954e98f3/web/sites/default/settings.php#L19), the config is moved entirely outside of the web root.
 
-```json
-"scripts": {
-    "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
-    "post-install-cmd": [
-        "@drupal-scaffold",
-        "..."
-    ],
-    "post-update-cmd": [
-        "@drupal-scaffold",
-        "..."
-    ]
-},
-```
-### How can I apply patches to downloaded modules?
+### `composer.json`
 
-If you need to apply patches (depending on the project being modified, a pull 
-request is often a better solution), you can do so with the 
-[composer-patches](https://github.com/cweagans/composer-patches) plugin.
+If you are just browsing this repository on GitHub, you may notice that the files of Drupal core itself are not included in this repo.  That is because Drupal core and contrib modules are installed via Composer and ignored in the `.gitignore` file. Specific contrib modules are added to the project via `composer.json` and `composer.lock` keeps track of the exact version of each modules (or other dependency). Modules, and themes are placed in the correct directories thanks to the `"installer-paths"` section of `composer.json`. `composer.json` also includes instructions for `drupal-scaffold` which takes care of placing some individual files in the correct places like `settings.pantheon.php`.
 
-To add a patch to drupal module foobar insert the patches section in the extra 
-section of composer.json:
-```json
-"extra": {
-    "patches": {
-        "drupal/foobar": {
-            "Patch description": "URL or local path to patch"
-        }
-    }
-}
-```
-### How do I switch from packagist.drupal-composer.org to packages.drupal.org?
+## Behat tests
 
-Follow the instructions in the [documentation on drupal.org](https://www.drupal.org/docs/develop/using-composer/using-packagesdrupalorg).
+So that CircleCI will have some test to run, this repository includes a configuration of Behat tests. You can add your own `.feature` files within `/tests/features/`.
+
+## Updating your site
+
+When using this repository to manage your Drupal site, you will no longer use the Pantheon dashboard to update your Drupal version. Instead, you will manage your updates using Composer. Ensure your site is in Git mode, clone it locally, and then run composer commands from there.  Commit and push your files back up to Pantheon as usual.

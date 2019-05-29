@@ -1,0 +1,20 @@
+uuid: 23c3e339-2eba-4fb5-ba61-e91df60aa1b0
+langcode: en
+status: true
+dependencies:
+  theme:
+    - westat
+_core:
+  default_config_hash: 7rR9chwXvdM2H8OYMAYx9Zj3GGlPMrZp_M3ZA4thYTk
+id: westat_page_title
+theme: westat
+region: content
+weight: -2
+provider: null
+plugin: page_title_block
+settings:
+  id: page_title_block
+  label: 'Page title'
+  provider: core
+  label_display: '0'
+visibility: {  }

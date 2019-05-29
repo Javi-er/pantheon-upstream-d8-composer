@@ -1,0 +1,10 @@
+<?php
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function taoti_helper_page_attachments_alter(array &$attachments) {
+
+  $attachments['#attached']['library'][] = 'taoti_helper/taoti_helper';
+
+}

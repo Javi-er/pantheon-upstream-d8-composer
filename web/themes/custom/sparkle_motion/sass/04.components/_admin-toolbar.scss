@@ -1,0 +1,6 @@
+// this fixes a problem with the Edit text in the far right of the
+// admin toolbar from not being visually hidden properly, causing
+// weird overflow issues especially at mobile.
+#toolbar-administration .contextual-toolbar-tab .toolbar-icon-edit {
+  display: block;
+}

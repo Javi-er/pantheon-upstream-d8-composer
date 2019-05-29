@@ -1,0 +1,13 @@
+.siteBranding {
+
+  a {
+    display: block;
+    height: 100px;
+    width: 100px;
+  }
+
+  img {
+    @include fluidImage();
+    width: 100%;
+  }
+}
