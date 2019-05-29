@@ -33,7 +33,7 @@ class WebformElementMediaFileTest extends WebformElementManagedFileTestBase {
     /* Element render */
 
     // Get test webform.
-    $this->drupalGet('webform/test_element_media_file');
+    $this->drupalGet('/webform/test_element_media_file');
 
     // Check document file.
     $this->assertRaw('<input data-drupal-selector="edit-document-file-upload" type="file" id="edit-document-file-upload" name="files[document_file]" size="22" class="js-form-file form-file" />');
@@ -57,7 +57,7 @@ class WebformElementMediaFileTest extends WebformElementManagedFileTestBase {
     $this->assertRaw('<source src="' . $this->getAbsoluteUrl('/system/files/webform/test_element_media_file/_sid_/audio_file_mp3.mp3') . '" type="audio/mpeg">');
 
     // Check image file preview.
-    $this->assertRaw('<img class="webform-image-file" alt="image_file_jpg.jpg" src="' . $this->getAbsoluteUrl('/system/files/webform/test_element_media_file/_sid_/image_file_jpg.jpg') . '" />');
+    $this->assertRaw('<img class="webform-image-file" alt="image_file_jpg.jpg" title="image_file_jpg.jpg" src="' . $this->getAbsoluteUrl('/system/files/webform/test_element_media_file/_sid_/image_file_jpg.jpg') . '" />');
 
     // Check image file link to modal.
     $this->assertRaw('/system/files/webform/test_element_media_file/_sid_/image_file_jpg_modal.jpg" class="js-webform-image-file-modal webform-image-file-modal">');

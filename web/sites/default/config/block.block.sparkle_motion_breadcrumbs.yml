@@ -1,0 +1,22 @@
+uuid: 0f43f787-4e1c-42d4-971c-24d11059af3d
+langcode: en
+status: false
+dependencies:
+  module:
+    - system
+  theme:
+    - sparkle_motion
+_core:
+  default_config_hash: _yykkGB8NmTedxEXQyFANjRqq_I6HJsXENrP9bampLE
+id: sparkle_motion_breadcrumbs
+theme: sparkle_motion
+region: header
+weight: 0
+provider: null
+plugin: system_breadcrumb_block
+settings:
+  id: system_breadcrumb_block
+  label: Breadcrumbs
+  provider: system
+  label_display: '0'
+visibility: {  }

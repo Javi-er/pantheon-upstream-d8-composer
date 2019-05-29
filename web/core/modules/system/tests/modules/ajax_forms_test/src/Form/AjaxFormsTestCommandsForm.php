@@ -7,6 +7,8 @@ use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Form constructor for the Ajax Command display form.
+ *
+ * @internal
  */
 class AjaxFormsTestCommandsForm extends FormBase {
 
@@ -39,6 +41,42 @@ class AjaxFormsTestCommandsForm extends FormBase {
       '#type' => 'submit',
       '#ajax' => [
         'callback' => 'ajax_forms_test_advanced_commands_alert_callback',
+      ],
+    ];
+
+    // Shows the 'announce' command with default priority.
+    $form['announce_command_example'] = [
+      '#value' => $this->t("AJAX 'Announce': Click to announce"),
+      '#type' => 'submit',
+      '#ajax' => [
+        'callback' => 'ajax_forms_test_advanced_commands_announce_callback',
+      ],
+    ];
+
+    // Shows the 'announce' command with 'polite' priority.
+    $form['announce_command_polite_example'] = [
+      '#value' => $this->t("AJAX 'Announce': Click to announce with 'polite' priority"),
+      '#type' => 'submit',
+      '#ajax' => [
+        'callback' => 'ajax_forms_test_advanced_commands_announce_polite_callback',
+      ],
+    ];
+
+    // Shows the 'announce' command with 'assertive' priority.
+    $form['announce_command_assertive_example'] = [
+      '#value' => $this->t("AJAX 'Announce': Click to announce with 'assertive' priority"),
+      '#type' => 'submit',
+      '#ajax' => [
+        'callback' => 'ajax_forms_test_advanced_commands_announce_assertive_callback',
+      ],
+    ];
+
+    // Shows the 'announce' command used twice in one AjaxResponse.
+    $form['announce_command_double_example'] = [
+      '#value' => $this->t("AJAX 'Announce': Click to announce twice"),
+      '#type' => 'submit',
+      '#ajax' => [
+        'callback' => 'ajax_forms_test_advanced_commands_double_announce_callback',
       ],
     ];
 

@@ -2,8 +2,17 @@
 
 namespace Drupal\twig_tweak;
 
+use Drupal\Component\Utility\Unicode;
+use Drupal\Component\Uuid\Uuid;
+use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Block\TitleBlockPluginInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Field\FieldItemInterface;
+use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Link;
+use Drupal\Core\Plugin\ContextAwarePluginInterface;
+use Drupal\Core\Render\Element;
+use Drupal\Core\Render\Markup;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Drupal\image\Entity\ImageStyle;
@@ -12,8 +21,7 @@ use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 /**
  * Twig extension with some useful functions and filters.
  *
- * As version 1.7 all dependencies are instantiated on demand for performance
- * reasons.
+ * Dependency injection is not used for performance reason.
  */
 class TwigExtension extends \Twig_Extension {
 
@@ -21,23 +29,29 @@ class TwigExtension extends \Twig_Extension {
    * {@inheritdoc}
    */
   public function getFunctions() {
+    $all_options = ['needs_environment' => TRUE, 'needs_context' => TRUE];
+    $context_options = ['needs_context' => TRUE];
     return [
       new \Twig_SimpleFunction('drupal_view', 'views_embed_view'),
+      new \Twig_SimpleFunction('drupal_view_result', 'views_get_view_result'),
       new \Twig_SimpleFunction('drupal_block', [$this, 'drupalBlock']),
       new \Twig_SimpleFunction('drupal_region', [$this, 'drupalRegion']),
       new \Twig_SimpleFunction('drupal_entity', [$this, 'drupalEntity']),
+      new \Twig_SimpleFunction('drupal_entity_form', [$this, 'drupalEntityForm']),
       new \Twig_SimpleFunction('drupal_field', [$this, 'drupalField']),
       new \Twig_SimpleFunction('drupal_menu', [$this, 'drupalMenu']),
       new \Twig_SimpleFunction('drupal_form', [$this, 'drupalForm']),
+      new \Twig_SimpleFunction('drupal_image', [$this, 'drupalImage']),
       new \Twig_SimpleFunction('drupal_token', [$this, 'drupalToken']),
       new \Twig_SimpleFunction('drupal_config', [$this, 'drupalConfig']),
-      new \Twig_SimpleFunction('drupal_dump', [$this, 'drupalDump']),
-      new \Twig_SimpleFunction('dd', [$this, 'drupalDump']),
-      // Wrap drupal_set_message() because it returns some value which is not
-      // suitable for Twig template.
-      new \Twig_SimpleFunction('drupal_set_message', [$this, 'drupalSetMessage']),
+      new \Twig_SimpleFunction('drupal_dump', [$this, 'drupalDump'], $context_options),
+      new \Twig_SimpleFunction('dd', [$this, 'drupalDump'], $context_options),
       new \Twig_SimpleFunction('drupal_title', [$this, 'drupalTitle']),
       new \Twig_SimpleFunction('drupal_url', [$this, 'drupalUrl']),
+      new \Twig_SimpleFunction('drupal_link', [$this, 'drupalLink']),
+      new \Twig_SimpleFunction('drupal_messages', [$this, 'drupalMessages']),
+      new \Twig_SimpleFunction('drupal_breadcrumb', [$this, 'drupalBreadcrumb']),
+      new \Twig_SimpleFunction('drupal_breakpoint', [$this, 'drupalBreakpoint'], $all_options),
     ];
   }
 
@@ -51,6 +65,10 @@ class TwigExtension extends \Twig_Extension {
       new \Twig_SimpleFilter('image_style', [$this, 'imageStyle']),
       new \Twig_SimpleFilter('transliterate', [$this, 'transliterate']),
       new \Twig_SimpleFilter('check_markup', [$this, 'checkMarkup']),
+      new \Twig_SimpleFilter('truncate', [$this, 'truncate']),
+      new \Twig_SimpleFilter('view', [$this, 'view']),
+      new \Twig_SimpleFilter('with', [$this, 'with']),
+      new \Twig_SimpleFilter('children', [$this, 'children']),
     ];
     // PHP filter should be enabled in settings.php file.
     if (Settings::get('twig_tweak_enable_php_filter')) {
@@ -67,22 +85,70 @@ class TwigExtension extends \Twig_Extension {
   }
 
   /**
-   * Builds the render array for the provided block.
+   * Builds the render array for a block.
    *
    * @param mixed $id
-   *   The ID of the block to render.
-   * @param bool $check_access
-   *   (Optional) Indicates that access check is required.
+   *   The string of block plugin to render.
+   * @param array $configuration
+   *   (Optional) Pass on any configuration to the plugin block.
+   * @param bool $wrapper
+   *   (Optional) Whether or not use block template for rendering.
    *
    * @return null|array
-   *   A render array for the block or NULL if the block does not exist.
+   *   A render array for the block or NULL if the block cannot be rendered.
    */
-  public function drupalBlock($id, $check_access = TRUE) {
-    $entity_type_manager = \Drupal::entityTypeManager();
-    $block = $entity_type_manager->getStorage('block')->load($id);
-    if ($block && (!$check_access || $this->entityAccess($block))) {
-      return $entity_type_manager->getViewBuilder('block')->view($block);
+  public function drupalBlock($id, array $configuration = [], $wrapper = TRUE) {
+
+    $configuration += ['label_display' => BlockPluginInterface::BLOCK_LABEL_VISIBLE];
+
+    /** @var \Drupal\Core\Block\BlockPluginInterface $block_plugin */
+    $block_plugin = \Drupal::service('plugin.manager.block')
+      ->createInstance($id, $configuration);
+
+    // Inject runtime contexts.
+    if ($block_plugin instanceof ContextAwarePluginInterface) {
+      $contexts = \Drupal::service('context.repository')->getRuntimeContexts($block_plugin->getContextMapping());
+      \Drupal::service('context.handler')->applyContextMapping($block_plugin, $contexts);
     }
+
+    if (!$block_plugin->access(\Drupal::currentUser())) {
+      return;
+    }
+
+    // Title block needs special treatment.
+    if ($block_plugin instanceof TitleBlockPluginInterface) {
+      $request = \Drupal::request();
+      $route_match = \Drupal::routeMatch();
+      $title = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
+      $block_plugin->setTitle($title);
+    }
+
+    $build = [
+      'content' => $block_plugin->build(),
+      '#cache' => [
+        'contexts' => $block_plugin->getCacheContexts(),
+        'tags' => $block_plugin->getCacheTags(),
+        'max-age' => $block_plugin->getCacheMaxAge(),
+      ],
+    ];
+
+    if ($block_plugin instanceof TitleBlockPluginInterface) {
+      $build['#cache']['contexts'][] = 'url';
+    }
+
+    if ($wrapper && !Element::isEmpty($build['content'])) {
+      $build += [
+        '#theme' => 'block',
+        '#attributes' => [],
+        '#contextual_links' => [],
+        '#configuration' => $block_plugin->getConfiguration(),
+        '#plugin_id' => $block_plugin->getPluginId(),
+        '#base_plugin_id' => $block_plugin->getBaseId(),
+        '#derivative_plugin_id' => $block_plugin->getDerivativeId(),
+      ];
+    }
+
+    return $build;
   }
 
   /**
@@ -110,7 +176,7 @@ class TwigExtension extends \Twig_Extension {
 
     /* @var $blocks \Drupal\block\BlockInterface[] */
     foreach ($blocks as $id => $block) {
-      if ($this->entityAccess($block)) {
+      if ($block->access('view')) {
         $block_plugin = $block->getPlugin();
         if ($block_plugin instanceof TitleBlockPluginInterface) {
           $request = \Drupal::request();
@@ -122,6 +188,11 @@ class TwigExtension extends \Twig_Extension {
       }
     }
 
+    if ($build) {
+      $build['#region'] = $region;
+      $build['#theme_wrappers'] = ['region'];
+    }
+
     return $build;
   }
 
@@ -131,24 +202,59 @@ class TwigExtension extends \Twig_Extension {
    * @param string $entity_type
    *   The entity type.
    * @param mixed $id
-   *   The ID of the entity to render.
+   *   The ID of the entity to build.
    * @param string $view_mode
    *   (optional) The view mode that should be used to render the entity.
    * @param string $langcode
    *   (optional) For which language the entity should be rendered, defaults to
    *   the current content language.
+   * @param bool $check_access
+   *   (Optional) Indicates that access check is required.
    *
    * @return null|array
    *   A render array for the entity or NULL if the entity does not exist.
    */
-  public function drupalEntity($entity_type, $id = NULL, $view_mode = NULL, $langcode = NULL) {
+  public function drupalEntity($entity_type, $id = NULL, $view_mode = NULL, $langcode = NULL, $check_access = TRUE) {
     $entity_type_manager = \Drupal::entityTypeManager();
     $entity = $id
       ? $entity_type_manager->getStorage($entity_type)->load($id)
       : \Drupal::routeMatch()->getParameter($entity_type);
-    if ($entity && $this->entityAccess($entity)) {
+    if ($entity && (!$check_access || $entity->access('view'))) {
       $render_controller = $entity_type_manager->getViewBuilder($entity_type);
       return $render_controller->view($entity, $view_mode, $langcode);
+    }
+  }
+
+  /**
+   * Gets the built and processed entity form for the given entity type.
+   *
+   * @param string $entity_type
+   *   The entity type.
+   * @param mixed $id
+   *   (optional) The ID of the entity to build. If empty then new entity will
+   *   be created.
+   * @param string $form_mode
+   *   (optional) The mode identifying the form variation to be returned.
+   * @param array $values
+   *   (optional) An array of values to set, keyed by property name.
+   * @param bool $check_access
+   *   (Optional) Indicates that access check is required.
+   *
+   * @return array
+   *   The processed form for the given entity type and form mode.
+   */
+  public function drupalEntityForm($entity_type, $id = NULL, $form_mode = 'default', array $values = [], $check_access = TRUE) {
+    $entity_storage = \Drupal::entityTypeManager()->getStorage($entity_type);
+    if ($id) {
+      $entity = $entity_storage->load($id);
+      $operation = 'update';
+    }
+    else {
+      $entity = $entity_storage->create($values);
+      $operation = 'create';
+    }
+    if ($entity && (!$check_access || $entity->access($operation))) {
+      return \Drupal::service('entity.form_builder')->getForm($entity, $form_mode);
     }
   }
 
@@ -165,19 +271,20 @@ class TwigExtension extends \Twig_Extension {
    *   (optional) The view mode that should be used to render the field.
    * @param string $langcode
    *   (optional) Language code to load translation.
+   * @param bool $check_access
+   *   (Optional) Indicates that access check is required.
    *
    * @return null|array
    *   A render array for the field or NULL if the value does not exist.
    */
-  public function drupalField($field_name, $entity_type, $id = NULL, $view_mode = 'default', $langcode = NULL) {
+  public function drupalField($field_name, $entity_type, $id = NULL, $view_mode = 'default', $langcode = NULL, $check_access = TRUE) {
     /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
     $entity = $id
       ? \Drupal::entityTypeManager()->getStorage($entity_type)->load($id)
       : \Drupal::routeMatch()->getParameter($entity_type);
-    if ($entity && $this->entityAccess($entity)) {
-      if ($langcode && $entity->hasTranslation($langcode)) {
-        $entity = $entity->getTranslation($langcode);
-      }
+    if ($entity && (!$check_access || $entity->access('view'))) {
+      $entity = \Drupal::service('entity.repository')
+        ->getTranslationFromContext($entity, $langcode);
       if (isset($entity->{$field_name})) {
         return $entity->{$field_name}->view($view_mode);
       }
@@ -193,11 +300,13 @@ class TwigExtension extends \Twig_Extension {
    *   (optional) Initial menu level.
    * @param int $depth
    *   (optional) Maximum number of menu levels to display.
+   * @param bool $expand
+   *   (optional) Expand all menu links.
    *
    * @return array
    *   A render array for the menu.
    */
-  public function drupalMenu($menu_name, $level = 1, $depth = 0) {
+  public function drupalMenu($menu_name, $level = 1, $depth = 0, $expand = FALSE) {
     /** @var \Drupal\Core\Menu\MenuLinkTreeInterface $menu_tree */
     $menu_tree = \Drupal::service('menu.link_tree');
     $parameters = $menu_tree->getCurrentRouteMenuTreeParameters($menu_name);
@@ -210,6 +319,11 @@ class TwigExtension extends \Twig_Extension {
     // (absolute) depth, that may never exceed the maximum depth.
     if ($depth > 0) {
       $parameters->setMaxDepth(min($level + $depth - 1, $menu_tree->maxDepth()));
+    }
+
+    // If expandedParents is empty, the whole menu tree is built.
+    if ($expand) {
+      $parameters->expandedParents = [];
     }
 
     $tree = $menu_tree->load($menu_name, $parameters);
@@ -234,8 +348,74 @@ class TwigExtension extends \Twig_Extension {
    */
   public function drupalForm($form_id) {
     $form_builder = \Drupal::formBuilder();
-    $args = func_get_args();
-    return call_user_func_array([$form_builder, 'getForm'], $args);
+    return call_user_func_array([$form_builder, 'getForm'], func_get_args());
+  }
+
+  /**
+   * Builds an image.
+   *
+   * @param mixed $property
+   *   A property to identify the image.
+   * @param string $style
+   *   (Optional) Image style.
+   * @param array $attributes
+   *   (Optional) Image attributes.
+   * @param bool $responsive
+   *   (Optional) Indicates that the provided image style is responsive.
+   * @param bool $check_access
+   *   (Optional) Indicates that access check is required.
+   *
+   * @return array|null
+   *   A render array to represent the image.
+   */
+  public function drupalImage($property, $style = NULL, array $attributes = [], $responsive = FALSE, $check_access = TRUE) {
+
+    // Determine property type by its value.
+    if (preg_match('/^\d+$/', $property)) {
+      $property_type = 'fid';
+    }
+    elseif (Uuid::isValid($property)) {
+      $property_type = 'uuid';
+    }
+    else {
+      $property_type = 'uri';
+    }
+
+    $files = \Drupal::entityTypeManager()
+      ->getStorage('file')
+      ->loadByProperties([$property_type => $property]);
+
+    // To avoid ambiguity render nothing unless exact one image was found.
+    if (count($files) != 1) {
+      return;
+    }
+
+    $file = reset($files);
+
+    if ($check_access && !$file->access('view')) {
+      return;
+    }
+
+    $build = [
+      '#uri' => $file->getFileUri(),
+      '#attributes' => $attributes,
+    ];
+
+    if ($style) {
+      if ($responsive) {
+        $build['#type'] = 'responsive_image';
+        $build['#responsive_image_style_id'] = $style;
+      }
+      else {
+        $build['#theme'] = 'image_style';
+        $build['#style_name'] = $style;
+      }
+    }
+    else {
+      $build['#theme'] = 'image';
+    }
+
+    return $build;
   }
 
   /**
@@ -279,46 +459,20 @@ class TwigExtension extends \Twig_Extension {
 
   /**
    * Dumps information about variables.
+   *
+   * @param array $context
+   *   Variables from the Twig template.
+   * @param mixed $variable
+   *   (Optional) The variable to dump.
    */
-  public function drupalDump($var) {
+  public function drupalDump(array $context, $variable = NULL) {
     $var_dumper = '\Symfony\Component\VarDumper\VarDumper';
     if (class_exists($var_dumper)) {
-      call_user_func($var_dumper . '::dump', $var);
+      call_user_func($var_dumper . '::dump', func_num_args() == 1 ? $context : $variable);
     }
     else {
       trigger_error('Could not dump the variable because symfony/var-dumper component is not installed.', E_USER_WARNING);
     }
-  }
-
-  /**
-   * An alias for self::drupalDump().
-   *
-   * @see \Drupal\twig_tweak\TwigExtension::drupalDump();
-   */
-  public function dd() {
-    $this->drupalDump(func_get_args());
-  }
-
-  /**
-   * Sets a message to display to the user.
-   *
-   * @param string|\Drupal\Component\Render\MarkupInterface $message
-   *   (optional) The translated message to be displayed to the user.
-   * @param string $type
-   *   (optional) The message's type. Defaults to 'status'.
-   * @param bool $repeat
-   *   (optional) If this is FALSE and the message is already set, then the
-   *   message will not be repeated. Defaults to FALSE.
-   *
-   * @return array
-   *   A render array to disable caching.
-   *
-   * @see drupal_set_message()
-   */
-  public function drupalSetMessage($message = NULL, $type = 'status', $repeat = FALSE) {
-    drupal_set_message($message, $type, $repeat);
-    $build['#cache']['max-age'] = 0;
-    return $build;
   }
 
   /**
@@ -338,23 +492,97 @@ class TwigExtension extends \Twig_Extension {
   }
 
   /**
-   * Generates a URL from internal path.
+   * Generates a URL from an internal path.
    *
    * @param string $user_input
    *   User input for a link or path.
    * @param array $options
    *   (optional) An array of options.
+   * @param bool $check_access
+   *   (Optional) Indicates that access check is required.
    *
    * @return \Drupal\Core\Url
    *   A new Url object based on user input.
    *
    * @see \Drupal\Core\Url::fromUserInput()
    */
-  public function drupalUrl($user_input, array $options = []) {
+  public function drupalUrl($user_input, array $options = [], $check_access = FALSE) {
+    if (isset($options['langcode'])) {
+      $language_manager = \Drupal::languageManager();
+      if ($language = $language_manager->getLanguage($options['langcode'])) {
+        $options['language'] = $language;
+      }
+    }
     if (!in_array($user_input[0], ['/', '#', '?'])) {
       $user_input = '/' . $user_input;
     }
-    return Url::fromUserInput($user_input, $options);
+    $url = Url::fromUserInput($user_input, $options);
+    if (!$check_access || $url->access()) {
+      return $url;
+    }
+  }
+
+  /**
+   * Generates a link from an internal path.
+   *
+   * @param string $text
+   *   The text to be used for the link.
+   * @param string $user_input
+   *   User input for a link or path.
+   * @param array $options
+   *   (optional) An array of options.
+   * @param bool $check_access
+   *   (Optional) Indicates that access check is required.
+   *
+   * @return \Drupal\Core\Link
+   *   A new Link object.
+   *
+   * @see \Drupal\Core\Link::fromTextAndUrl()
+   */
+  public function drupalLink($text, $user_input, array $options = [], $check_access = FALSE) {
+    $url = $this->drupalUrl($user_input, $options, $check_access);
+    if ($url) {
+      // The text has been processed by twig already, convert it to a safe
+      // object for the render system.
+      // @see \Drupal\Core\Template\TwigExtension::getLink()
+      if ($text instanceof \Twig_Markup) {
+        $text = Markup::create($text);
+      }
+      return Link::fromTextAndUrl($text, $url);
+    }
+  }
+
+  /**
+   * Displays status messages.
+   */
+  public function drupalMessages() {
+    return ['#type' => 'status_messages'];
+  }
+
+  /**
+   * Builds the breadcrumb.
+   */
+  public function drupalBreadcrumb() {
+    return \Drupal::service('breadcrumb')
+      ->build(\Drupal::routeMatch())
+      ->toRenderable();
+  }
+
+  /**
+   * Emits a breakpoint to the debug client.
+   *
+   * @param \Twig_Environment $environment
+   *   The Twig environment instance.
+   * @param array $context
+   *   Variables from the Twig template.
+   */
+  public function drupalBreakpoint(\Twig_Environment $environment, array $context) {
+    if (function_exists('xdebug_break')) {
+      xdebug_break();
+    }
+    else {
+      trigger_error('Could not make a break because xdebug is not available.', E_USER_WARNING);
+    }
   }
 
   /**
@@ -384,11 +612,6 @@ class TwigExtension extends \Twig_Extension {
    *   The new text if matches are found, otherwise unchanged text.
    */
   public function pregReplaceFilter($text, $pattern, $replacement) {
-    // BC layer. Before version 8.x-1.8 the pattern was without delimiters.
-    // @todo Remove this in Drupal 9.
-    if (strpos($pattern, '/') !== 0) {
-      return preg_replace("/$pattern/", $replacement, $text);
-    }
     return preg_replace($pattern, $replacement, $text);
   }
 
@@ -459,6 +682,91 @@ class TwigExtension extends \Twig_Extension {
   }
 
   /**
+   * Truncates a UTF-8-encoded string safely to a number of characters.
+   *
+   * @param string $string
+   *   The string to truncate.
+   * @param int $max_length
+   *   An upper limit on the returned string length, including trailing ellipsis
+   *   if $add_ellipsis is TRUE.
+   * @param bool $wordsafe
+   *   (Optional) If TRUE, attempt to truncate on a word boundary.
+   * @param bool $add_ellipsis
+   *   (Optional) If TRUE, add '...' to the end of the truncated string.
+   * @param int $min_wordsafe_length
+   *   (Optional) If TRUE, the minimum acceptable length for truncation.
+   *
+   * @return string
+   *   The truncated string.
+   *
+   * @see \Drupal\Component\Utility\Unicode::truncate()
+   */
+  public function truncate($string, $max_length, $wordsafe = FALSE, $add_ellipsis = FALSE, $min_wordsafe_length = 1) {
+    return Unicode::truncate($string, $max_length, $wordsafe, $add_ellipsis, $min_wordsafe_length);
+  }
+
+  /**
+   * Adds new element to the array.
+   *
+   * @param array $build
+   *   The renderable array to add the child item.
+   * @param int|string $key
+   *   The key of the new element.
+   * @param mixed $element
+   *   The element to add.
+   *
+   * @return array
+   *   The modified array.
+   */
+  public function with(array $build, $key, $element) {
+    $build[$key] = $element;
+    return $build;
+  }
+
+  /**
+   * Filters out the children of a render array, optionally sorted by weight.
+   *
+   * @param array $build
+   *   The render array whose children are to be filtered.
+   * @param bool $sort
+   *   Boolean to indicate whether the children should be sorted by weight.
+   *
+   * @return array
+   *   The element's children.
+   */
+  public function children(array $build, $sort = FALSE) {
+    $keys = Element::children($build, $sort);
+    return array_intersect_key($build, array_flip($keys));
+  }
+
+  /**
+   * Returns a render array for entity, field list or field item.
+   *
+   * @param mixed $object
+   *   The object to build a render array from.
+   * @param string|array $display_options
+   *   Can be either the name of a view mode, or an array of display settings.
+   * @param string $langcode
+   *   (optional) For which language the entity should be rendered, defaults to
+   *   the current content language.
+   * @param bool $check_access
+   *   (Optional) Indicates that access check is required.
+   *
+   * @return array
+   *   A render array to represent the object.
+   */
+  public function view($object, $display_options = 'default', $langcode = NULL, $check_access = TRUE) {
+    if ($object instanceof FieldItemListInterface || $object instanceof FieldItemInterface) {
+      return $object->view($display_options);
+    }
+    elseif ($object instanceof EntityInterface && (!$check_access || $object->access('view'))) {
+      return \Drupal::entityTypeManager()
+        ->getViewBuilder($object->getEntityTypeId())
+        ->view($object, $display_options, $langcode);
+    }
+  }
+
+  /**
    * Evaluates a string of PHP code.
    *
    * @param string $code
@@ -475,23 +783,6 @@ class TwigExtension extends \Twig_Extension {
     $output = ob_get_contents();
     ob_end_clean();
     return $output;
-  }
-
-  /**
-   * Checks view access to a given entity.
-   *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   Entity to check access.
-   *
-   * @return bool
-   *   The access check result.
-   *
-   * @TODO Remove "check_access" option in 9.x.
-   */
-  protected function entityAccess(EntityInterface $entity) {
-    // Prior version 8.x-1.7 entity access was not checked. The "check_access"
-    // option provides a workaround for possible BC issues.
-    return !Settings::get('twig_tweak_check_access', TRUE) || $entity->access('view');
   }
 
 }

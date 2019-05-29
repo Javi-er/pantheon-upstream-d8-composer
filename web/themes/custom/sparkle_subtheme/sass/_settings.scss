@@ -1,0 +1,24 @@
+// sass settings and variables
+$width-xs: 350px;
+$width-s: 600px;
+$width-m: 800px;
+$width-l: 1100px;
+$width-max: 1600px;
+
+// fonts
+$font-sans: "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, "Open Sans", "Source Sans Pro", "Droid Serif", Arial, "Segoe UI", sans-serif;
+$font-serif: "Adobe Garamond Pro", Garamond, Baskerville, "Baskerville Old Face", "Hoefler Text", "Times New Roman", serif;
+$font-mono: Courier, monospace;
+
+// raw colors
+$color-white: #fff;
+$color-black: #000;
+$color-charcoal: #333;
+
+
+// semantic colors
+$color-background: $color-white;
+$color-text: $color-charcoal;
+
+// layout variables
+$baseFontSize: 18px;

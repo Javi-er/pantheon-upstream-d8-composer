@@ -1,0 +1,44 @@
+name: Sparkle Motion
+type: theme
+description: Taoti's base theme for Sparkle Subthemes.
+package: Other
+core: 8.x
+base theme: classy
+hidden: true
+
+
+libraries:
+  - sparkle_motion/global
+  - sparkle_motion/jquery-throttle-debounce
+  - sparkle_motion/what-input
+  - sparkle_motion/jquery.visible
+
+
+regions:
+  header: 'Header'
+  content: 'Content'
+  footer: 'Footer'
+
+
+libraries-override:
+  # Remove IE 9 compatibility shiv
+  core/classList: false
+  # Remove IE 8 compatibility shiv
+  core/html5shiv: false
+  # Provide our own, more recent version of normalize.css
+  core/normalize: sparkle_motion/normalize
+  # Provide our own, more recent version of jQuery
+  core/jquery: sparkle_motion/jquery
+
+  # override classy
+  classy/base: sparkle_motion/base
+  classy/book-navigation: sparkle_motion/book-navigation
+  classy/dialog: sparkle_motion/dialog
+  classy/dropbutton: sparkle_motion/dropbutton
+  classy/file: sparkle_motion/file
+  classy/forum: sparkle_motion/forum
+  classy/indented: sparkle_motion/indented
+  classy/messages: sparkle_motion/messages
+  classy/node: sparkle_motion/node
+  classy/progress: sparkle_motion/progress
+  classy/search-results: sparkle_motion/search-results

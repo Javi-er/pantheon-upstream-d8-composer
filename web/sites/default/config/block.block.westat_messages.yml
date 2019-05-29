@@ -1,0 +1,22 @@
+uuid: 4843f0ac-3dfa-4378-8e8e-71617d70ab82
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - westat
+_core:
+  default_config_hash: KHQIJ7Vfl25lTjzIc7qIvnuistt-Mw2O0kG4jCofmkI
+id: westat_messages
+theme: westat
+region: content
+weight: -3
+provider: null
+plugin: system_messages_block
+settings:
+  id: system_messages_block
+  label: 'Status messages'
+  provider: system
+  label_display: '0'
+visibility: {  }

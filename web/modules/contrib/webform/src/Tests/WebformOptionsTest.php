@@ -4,7 +4,6 @@ namespace Drupal\webform\Tests;
 
 use Drupal\Core\Serialization\Yaml;
 use Drupal\webform\Entity\WebformOptions;
-use Drupal\webform\WebformInterface;
 
 /**
  * Tests for webform option entity.
@@ -28,20 +27,22 @@ class WebformOptionsTest extends WebformTestBase {
   protected static $testWebforms = ['test_options'];
 
   /**
-   * {@inheritdoc}
-   */
-  public function setUp() {
-    parent::setUp();
-
-    // Create users.
-    $this->createUsers();
-  }
-
-  /**
    * Tests webform options entity.
    */
   public function testWebformOptions() {
-    $this->drupalLogin($this->normalUser);
+    $normal_user = $this->drupalCreateUser();
+
+    $admin_user = $this->drupalCreateUser([
+      'access site reports',
+      'administer site configuration',
+      'administer webform',
+      'create webform',
+      'administer users',
+    ]);
+
+    /**************************************************************************/
+
+    $this->drupalLogin($normal_user);
 
     // Check get element options.
     $yes_no_options = ['Yes' => 'Yes', 'No' => 'No'];
@@ -65,7 +66,7 @@ class WebformOptionsTest extends WebformTestBase {
     /** @var \Drupal\webform\WebformOptionsInterface $webform_options */
     $webform_options = WebformOptions::create([
       'langcode' => 'en',
-      'status' => WebformInterface::STATUS_OPEN,
+      'status' => TRUE,
       'id' => 'test_flag',
       'title' => 'Test flag',
       'options' => Yaml::encode($color_options),
@@ -83,7 +84,7 @@ class WebformOptionsTest extends WebformTestBase {
 
     // Check hook_webform_options_alter() && hook_webform_options_WEBFORM_OPTIONS_ID_alter().
     // Check that the default value can be set from the alter hook.
-    $this->drupalGet('webform/test_options');
+    $this->drupalGet('/webform/test_options');
     $this->assertRaw('<select data-drupal-selector="edit-custom" id="edit-custom" name="custom" class="form-select"><option value="">- None -</option><option value="one" selected="selected">One</option><option value="two">Two</option><option value="three">Three</option></select>');
     $this->assertRaw('<select data-drupal-selector="edit-test" id="edit-test" name="test" class="form-select"><option value="" selected="selected">- None -</option><option value="four">Four</option><option value="five">Five</option><option value="six">Six</option></select>');
 
@@ -94,11 +95,11 @@ class WebformOptionsTest extends WebformTestBase {
     $webform_test_options->save();
     $this->debug($webform_test_options->getOptions());
 
-    $this->drupalGet('webform/test_options');
+    $this->drupalGet('/webform/test_options');
     $this->assertRaw('<select data-drupal-selector="edit-test" id="edit-test" name="test" class="form-select"><option value="" selected="selected">- None -</option><option value="red">Red</option><option value="white">White</option><option value="blue">Blue</option><option value="four">Four</option><option value="five">Five</option><option value="six">Six</option></select>');
 
     // Check custom options set via alter hook().
-    $this->drupalGet('webform/test_options');
+    $this->drupalGet('/webform/test_options');
     $this->assertRaw('<select data-drupal-selector="edit-test" id="edit-test" name="test" class="form-select"><option value="" selected="selected">- None -</option><option value="red">Red</option><option value="white">White</option><option value="blue">Blue</option><option value="four">Four</option><option value="five">Five</option><option value="six">Six</option></select>');
 
     // Check that 'Afghanistan' is the first option.
@@ -116,10 +117,18 @@ class WebformOptionsTest extends WebformTestBase {
     $options = WebformOptions::getElementOptions($element);
     $this->assertEqual(reset($options), 'Switzerland');
 
-    // Make sure we can reach the option admin pages.
-    $this->drupalLogin($this->adminWebformUser);
-    $this->drupalGet('admin/structure/webform/config/options/manage');
-    $this->drupalGet('admin/structure/webform/config/options/manage/add');
+    // Check admin user access denied.
+    $this->drupalGet('/admin/structure/webform/config/options/manage');
+    $this->assertResponse(403);
+    $this->drupalGet('/admin/structure/webform/config/options/manage/add');
+    $this->assertResponse(403);
+
+    // Check admin user access.
+    $this->drupalLogin($admin_user);
+    $this->drupalGet('/admin/structure/webform/config/options/manage');
+    $this->assertResponse(200);
+    $this->drupalGet('/admin/structure/webform/config/options/manage/add');
+    $this->assertResponse(200);
   }
 
 }

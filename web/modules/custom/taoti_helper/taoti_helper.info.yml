@@ -1,0 +1,11 @@
+type: module
+name: 'Taoti Helper'
+description: ''
+core: 8.x
+package: 'Taoti'
+
+dependencies:
+  - text
+
+libraries:
+  - taoti_helper/taoti_helper

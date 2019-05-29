@@ -1,0 +1,5 @@
+services:
+  taoti_helper.twig_extension:
+    class: Drupal\taoti_helper\TwigExtension
+    tags:
+      - { name: twig.extension }

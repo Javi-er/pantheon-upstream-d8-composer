@@ -2,6 +2,7 @@
 
 namespace Drupal\node\Plugin\views\wizard;
 
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\views\Plugin\views\wizard\WizardPluginBase;
 
 /**
@@ -25,20 +26,6 @@ class NodeRevision extends WizardPluginBase {
    * @var string
    */
   protected $createdColumn = 'changed';
-
-  /**
-   * Set default values for the filters.
-   */
-  protected $filters = [
-    'status' => [
-      'value' => TRUE,
-      'table' => 'node_field_revision',
-      'field' => 'status',
-      'plugin_id' => 'boolean',
-      'entity_type' => 'node',
-      'entity_field' => 'status',
-    ]
-  ];
 
   /**
    * Overrides Drupal\views\Plugin\views\wizard\WizardPluginBase::rowStyleOptions().
@@ -106,6 +93,50 @@ class NodeRevision extends WizardPluginBase {
     $display_options['fields']['title']['empty_zero'] = 0;
     $display_options['fields']['title']['settings']['link_to_entity'] = 0;
     $display_options['fields']['title']['plugin_id'] = 'field';
+    return $display_options;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function defaultDisplayFiltersUser(array $form, FormStateInterface $form_state) {
+    $filters = [];
+
+    $type = $form_state->getValue(['show', 'type']);
+    if ($type && $type != 'all') {
+      $filters['type'] = [
+        'id' => 'type',
+        'table' => 'node_field_data',
+        'field' => 'type',
+        'relationship' => 'nid',
+        'value' => [$type => $type],
+        'entity_type' => 'node',
+        'entity_field' => 'type',
+        'plugin_id' => 'bundle',
+      ];
+    }
+    return $filters;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function buildDisplayOptions($form, FormStateInterface $form_state) {
+    $display_options = parent::buildDisplayOptions($form, $form_state);
+    if (isset($display_options['default']['filters']['type'])) {
+      $display_options['default']['relationships']['nid'] = [
+        'id' => 'nid',
+        'table' => 'node_field_revision',
+        'field' => 'nid',
+        'relationship' => 'none',
+        'group_type' => 'group',
+        'admin_label' => 'Get the actual content from a content revision.',
+        'required' => 'true',
+        'entity_type' => 'node',
+        'entity_field' => 'nid',
+        'plugin_id' => 'standard',
+      ];
+    }
     return $display_options;
   }
 

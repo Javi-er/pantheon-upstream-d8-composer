@@ -6,12 +6,20 @@ package: Webform
 configure: entity.webform.collection
 dependencies:
   - 'drupal:field'
-  - 'drupal:system (>= 8.3)'
+  - 'drupal:system (>= 8.5)'
   - 'drupal:user'
-  - 'contribute:contribute'
+test_dependencies:
+  - 'address:address'
+  - 'captcha:captcha'
+  - 'chosen:chosen'
+  - 'jsonapi:jsonapi'
+  - 'mailsystem:mailsystem'
+  - 'select2:select2'
+  - 'telephone_validation/telephone_validation'
+  - 'token:token'
 
-# Information added by Drupal.org packaging script on 2018-02-04
-version: '8.x-5.0-rc3'
+# Information added by Drupal.org packaging script on 2019-03-28
+version: '8.x-5.2'
 core: '8.x'
 project: 'webform'
-datestamp: 1517746089
+datestamp: 1553768595

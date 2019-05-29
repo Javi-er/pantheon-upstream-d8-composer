@@ -1,0 +1,26 @@
+uuid: 540e28c5-453d-41fc-8453-aa1b8dcaed91
+langcode: en
+status: false
+dependencies:
+  config:
+    - system.menu.footer
+  module:
+    - system
+  theme:
+    - sparkle_motion
+_core:
+  default_config_hash: '-out5OsgkQLkyzqu-YwsYTge6cS219wvAs7sLA2r3Ec'
+id: sparkle_motion_footer
+theme: sparkle_motion
+region: header
+weight: 0
+provider: null
+plugin: 'system_menu_block:footer'
+settings:
+  id: 'system_menu_block:footer'
+  label: 'Footer menu'
+  provider: system
+  label_display: '0'
+  level: 1
+  depth: 0
+visibility: {  }

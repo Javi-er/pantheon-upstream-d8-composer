@@ -1,0 +1,16 @@
+
+/* Make sure input fields aren't cut off in vertical panes. */
+.vertical-tabs__pane input.form-autocomplete,
+.vertical-tabs__pane input.form-text,
+.vertical-tabs__pane input.form-tel,
+.vertical-tabs__pane input.form-email,
+.vertical-tabs__pane input.form-url,
+.vertical-tabs__pane input.form-search,
+.vertical-tabs__pane input.form-number,
+.vertical-tabs__pane input.form-color,
+.vertical-tabs__pane input.form-file,
+.vertical-tabs__pane input.form-date,
+.vertical-tabs__pane input.form-time,
+.vertical-tabs__pane textarea.form-textarea {
+  width: 100%;
+}

@@ -1,0 +1,22 @@
+uuid: 06b541d5-a5f3-4a21-aa25-44a98bf0b66c
+langcode: en
+status: false
+dependencies:
+  module:
+    - system
+  theme:
+    - sparkle_motion
+_core:
+  default_config_hash: Zh9Xux1-d84g8E5YHtSHYjLA_h5f2NuItrxT7iFZNOc
+id: sparkle_motion_messages
+theme: sparkle_motion
+region: header
+weight: 0
+provider: null
+plugin: system_messages_block
+settings:
+  id: system_messages_block
+  label: 'Status messages'
+  provider: system
+  label_display: '0'
+visibility: {  }

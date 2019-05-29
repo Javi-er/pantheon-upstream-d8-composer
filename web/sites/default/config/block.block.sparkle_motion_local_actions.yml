@@ -1,0 +1,20 @@
+uuid: 7c506f7e-097b-4286-8923-9d37c196aab5
+langcode: en
+status: true
+dependencies:
+  theme:
+    - sparkle_motion
+_core:
+  default_config_hash: 4YUTnBlOAUjaVErB8NIqDymlAR2OfwRUVn3JAZD9pFg
+id: sparkle_motion_local_actions
+theme: sparkle_motion
+region: content
+weight: -20
+provider: null
+plugin: local_actions_block
+settings:
+  id: local_actions_block
+  label: 'Primary admin actions'
+  provider: core
+  label_display: '0'
+visibility: {  }

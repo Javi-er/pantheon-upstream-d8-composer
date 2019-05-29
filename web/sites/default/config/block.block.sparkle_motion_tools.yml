@@ -1,0 +1,26 @@
+uuid: be7bd4b6-8c72-4fa5-8d1a-a1707f1bbd2a
+langcode: en
+status: false
+dependencies:
+  config:
+    - system.menu.tools
+  module:
+    - system
+  theme:
+    - sparkle_motion
+_core:
+  default_config_hash: BfahFBTiM1iiMi5bOVNQo5eeUQmhPGZtod1iQZBDEj8
+id: sparkle_motion_tools
+theme: sparkle_motion
+region: header
+weight: 0
+provider: null
+plugin: 'system_menu_block:tools'
+settings:
+  id: 'system_menu_block:tools'
+  label: Tools
+  provider: system
+  label_display: visible
+  level: 1
+  depth: 0
+visibility: {  }

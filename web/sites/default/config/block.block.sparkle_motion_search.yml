@@ -1,0 +1,22 @@
+uuid: 8547d4b9-0a3b-43dc-acd7-1eef634516df
+langcode: en
+status: false
+dependencies:
+  module:
+    - search
+  theme:
+    - sparkle_motion
+_core:
+  default_config_hash: _3lMrY35FmJF2vttFyDqCQSYGu1nJW8UaO-FR65MHeo
+id: sparkle_motion_search
+theme: sparkle_motion
+region: header
+weight: -1
+provider: null
+plugin: search_form_block
+settings:
+  id: search_form_block
+  label: Search
+  provider: search
+  label_display: visible
+visibility: {  }

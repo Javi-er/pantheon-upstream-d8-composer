@@ -1,0 +1,11 @@
+#  Global library
+taoti_helper:
+  version: 1.x
+  css:
+    theme:
+      css/taoti_helper.css: { minified: false }
+  js:
+    js/taoti_helper.js: { minified: false }
+  dependencies:
+    - text/drupal.text
+    - ckeditor/drupal.ckeditor

@@ -1,0 +1,28 @@
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0 auto;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+
+
+// temporary div that appears to measure
+// the width of the browser's scrollbar
+// for breakout
+.temporary-scrollbarMeasure {
+  position: absolute;
+  top: -9999px;
+  width: 100px;
+  height: 100px;
+  overflow: scroll;
+}

@@ -1,0 +1,29 @@
+@mixin layoutBreakout {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+
+  // these use the scrollbar class on body
+  // (set by custom js in sparkle_motion base theme)
+  // to adjust for the scrollbar's width so 100vw behaves
+  // as expected.
+  .scrollbar-5 & {
+    width: calc(100vw - 5px);
+    margin-left: calc(-50vw + 50% + 2.5px);
+  }
+
+  .scrollbar-12 & {
+    width: calc(100vw - 12px);
+    margin-left: calc(-50vw + 50% + 6px);
+  }
+
+  .scrollbar-15 & {
+    width: calc(100vw - 15px);
+    margin-left: calc(-50vw + 50% + 7.5px);
+  }
+
+  .scrollbar-17 & {
+    width: calc(100vw - 17px);
+    margin-left: calc(-50vw + 50% + 8.5px);
+  }
+}
