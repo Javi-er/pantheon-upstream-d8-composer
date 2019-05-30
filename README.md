@@ -5,8 +5,7 @@
 [![Dev Site composer-workbench](https://img.shields.io/badge/site-composer_workbench-blue.svg)](http://dev-composer-workbench.pantheonsite.io/)]
 
 
-# Getting Started On Your Local
-
+# Getting Started On [This Project] (Local Dev Setup)
 Welcome to this project! These instructions are for getting this specific project working on your local.
 
 We are assuming that you have previously completed [all these steps](#set-up-instrucitons)
@@ -15,10 +14,8 @@ We are assuming that you have previously completed [all these steps](#set-up-ins
 Clone the repo, dawg!
 
 ## Get the Local Server Running with Lando
-Run: `$ lando start`
-
-*The above command will compile all the composer dependencies for you on your local*
-in your command prompt, in the root of the repository
+Run: `$ lando start` in your command prompt, in the root of the repository
+*The above command will compile all the composer dependencies for you on your local* 
 
 If all is successful, it should spit out a number of urls that look similar to this:
 ```
@@ -51,7 +48,7 @@ https://github.com/pantheon-systems/terminus-build-tools-plugin#installing-build
 - Clone the Taoti composer upstream to your local. It should be located at https://github.com/Taoti/pantheon-upstream-d8-composer . Use the clone command to name your new site to match the variable your about to use for \[NEW-MACHINE-SITE-NAME\] below. (e.x. `git clone https://github.com/Taoti/pantheon-upstream-d8-composer.git my-new-site` ). 'my-new-site' will place this in a directory matching your new site name
 - Remove the git origin remote, this is important to do because the next command we run is going to establish the git remote and do everything else for us. `$ git remote remove origin`
 - Run the following command to get everything started with GitHub, CircleCI and Pantheon:
-Please note that "!" (exclamation points) don't work in the `--admin-password field`. `\[NEW-SITE-MACHINE-NAME\]` should be lower case, hypenated and not contain symbols
+Please note that "!" (exclamation points) don't work in the `--admin-password field`. `[NEW-SITE-MACHINE-NAME]` should be lower case, hypenated and not contain symbols
 ```
 $ terminus build:project:create --team="Taoti Creative" --admin-email="taotiadmin@taoti.com" --admin-password="[REDACTED]" --ci=circleci --git=github ./ [NEW-SITE-MACHINE-NAME] --preserve-local-repository
 ```
@@ -63,6 +60,7 @@ TLDR: Go to github repo > settings > (scroll to bottom) Transfer Repository
 
 # Set Up Instrucitons
 First Time Installation Instructions
+
 ## Install Composer
 Documentation:
 https://getcomposer.org/download/
@@ -85,7 +83,6 @@ curl -O https://raw.githubusercontent.com/pantheon-systems/terminus-installer/ma
 ## Getting Lando set up
 
 ### Install Docker
-
 If you don't know what you're doing with docker, and you've tinkered with it (have it already installed locally), I HIGHLY SUGGEST completely uninstalling it before moving on.
 At the very least you should be able to run `$ docker --help` and see meaningful output.
 
