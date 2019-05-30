@@ -64,12 +64,12 @@ Clone the composer upstream to your local
 
 Remove the git origin remote:
 ```
-git remote remove origin
+$ git remote remove origin
 ```
 
 Run the following command to get everything started with GitHub, CircleCI and Pantheon:
 ```
-terminus build:project:create --team="Taoti Creative" --admin-email="taotiadmin@taoti.com" --admin-password="[REDACTED -- note "!" won't work here in the password]" --ci=circleci --git=github ./ composer-workbench --preserve-local-repository
+$ terminus build:project:create --team="Taoti Creative" --admin-email="taotiadmin@taoti.com" --admin-password="[REDACTED -- note "!" won't work here in the password]" --ci=circleci --git=github ./ composer-workbench --preserve-local-repository
 ```
 
 ## Transition github repository created on your user to Taoti
