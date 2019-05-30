@@ -2,6 +2,9 @@
 
 namespace Drupal\taoti_helper;
 
+use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\Entity\EntityTypeManager;
+
 /**
  * Twig extension with some useful functions and filters.
  */
@@ -21,16 +24,15 @@ class TwigExtension extends \Twig_Extension {
    */
   public $routeMatch;
 
-
   /**
    * TwigExtension constructor.
    *
-   * @param \Drupal\Core\Entity\EntityInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManager $entity_type_manager
    *   Entity type manager object.
    * @param \Drupal\Core\Routing\CurrentRouteMatch $route_match
    *   Current route match object.
    */
-  public function __construct($entity_type_manager, $route_match) {
+  public function __construct(EntityTypeManager $entity_type_manager, CurrentRouteMatch $route_match) {
     $this->entityTypeManager = $entity_type_manager;
     $this->routeMatch = $route_match;
   }
