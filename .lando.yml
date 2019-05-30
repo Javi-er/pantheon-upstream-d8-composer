@@ -1,0 +1,7 @@
+name: composer-workbench
+recipe: pantheon
+config:
+  framework: drupal8
+  site: composer-workbench
+  id: b6f371ff-d036-4bf6-a57b-6f2c73763add
+  xdebug: true
