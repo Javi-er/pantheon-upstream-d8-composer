@@ -1,0 +1,15 @@
+# Put overrides to your pantheon.upstream.yml file here.
+# For more information, see: https://pantheon.io/docs/pantheon-yml/
+api_version: 1
+
+workflows:
+  deploy:
+    after:
+        - type: webphp
+          description: Post to Slack after deploy
+          script: private/scripts/slack_notification.php
+  sync_code:
+    after:
+        - type: webphp
+          description: Clear Drupal cache after code commit
+          script: private/scripts/clear_cache_d8.php

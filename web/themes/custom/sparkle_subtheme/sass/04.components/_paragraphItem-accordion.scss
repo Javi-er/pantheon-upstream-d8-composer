@@ -1,0 +1,25 @@
+.paragraphItem-accordion {
+  .fieldName-field-title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    cursor: pointer;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem 0;
+    user-select: none;
+
+    h2 {
+      margin: 0;
+      margin-right: 1rem;
+    }
+  }
+
+  .fieldName-field-content {
+    display: none;
+    padding-top: 0.5rem;
+    overflow: hidden;
+  }
+}

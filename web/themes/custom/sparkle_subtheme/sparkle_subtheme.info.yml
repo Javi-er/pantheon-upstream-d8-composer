@@ -1,0 +1,14 @@
+name: sparkle_subtheme
+type: theme
+description: Theme for ...
+package: Other
+core: 8.x
+base theme: sparkle_motion
+
+libraries:
+  - sparkle_subtheme/global
+
+regions:
+  header: 'Header'
+  content: 'Content'
+  footer: 'Footer'

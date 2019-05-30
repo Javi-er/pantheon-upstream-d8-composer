@@ -1,0 +1,23 @@
+uuid: 2dcad292-d571-438c-8e87-ec93e6c4b40a
+langcode: en
+status: true
+dependencies: {  }
+name: WYSIWYG
+format: wysiwyg
+weight: 0
+filters:
+  filter_htmlcorrector:
+    id: filter_htmlcorrector
+    provider: filter
+    status: true
+    weight: 10
+    settings: {  }
+  filter_html:
+    id: filter_html
+    provider: filter
+    status: true
+    weight: -10
+    settings:
+      allowed_html: '<a href hreflang> <em> <strong> <cite> <code> <blockquote cite> <iframe src width height frameborder> <ul type> <ol start type> <li> <dl> <dt> <dd> <h2 id> <h3 id> <h4 id> <h5 id> <h6 id> <p> <h1> <pre> <hr> <table> <caption> <tbody> <thead> <tfoot> <th> <td> <tr>'
+      filter_html_help: false
+      filter_html_nofollow: false

@@ -1,0 +1,22 @@
+uuid: 084d77fd-20ba-4d94-82fa-c7b008c1efea
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - westat
+_core:
+  default_config_hash: 9EoWV2Lot6FVSr50t4hoKgiz1LIXYWNG-IIPYsWxBqo
+id: westat_content
+theme: westat
+region: content
+weight: 1
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: 'Main page content'
+  provider: system
+  label_display: '0'
+visibility: {  }

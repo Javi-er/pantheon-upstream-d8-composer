@@ -1,0 +1,29 @@
+/**
+ * @file
+ * Visual styles for fields.
+ */
+
+.field-label {
+  font-weight: bold;
+}
+
+.layout-fieldLabel-inline .field-label,
+.layout-fieldLabel-inline .field-items {
+  align-left: flex-start;
+}
+
+.layout-fieldLabel-inline .field-label,
+.layout-fieldLabel-inline > .field-item,
+.layout-fieldLabel-inline .field-items {
+  padding-right: 0.5em;
+}
+
+[dir="rtl"] .layout-fieldLabel-inline .field-label,
+[dir="rtl"] .layout-fieldLabel-inline .field-items {
+  padding-left: 0.5em;
+  padding-right: 0;
+}
+
+.layout-fieldLabel-inline .field-label::after {
+  content: ':';
+}

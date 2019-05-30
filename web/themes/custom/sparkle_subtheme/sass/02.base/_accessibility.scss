@@ -1,0 +1,10 @@
+// data-whatintent is set by what-input.js
+// which is loaded by sparkle_motion, the base theme.
+// this is just for reference in case
+// you need to use it.
+
+// suppress focus ring on form controls
+// for mouse users, using what-input.js
+[data-whatintent='mouse'] *:focus {
+  outline: none;
+}

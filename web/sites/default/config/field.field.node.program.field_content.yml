@@ -1,0 +1,48 @@
+uuid: b1f5c1a2-6e9d-41e6-bfc0-66f6e706b5a7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_content
+    - node.type.program
+    - paragraphs.paragraphs_type.quote
+    - paragraphs.paragraphs_type.text
+    - paragraphs.paragraphs_type.text_image
+    - paragraphs.paragraphs_type.video
+  module:
+    - entity_reference_revisions
+id: node.program.field_content
+field_name: field_content
+entity_type: node
+bundle: program
+label: Content
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      quote: quote
+      text: text
+      text_image: text_image
+      video: video
+    target_bundles_drag_drop:
+      list:
+        weight: 6
+        enabled: false
+      quote:
+        enabled: true
+        weight: 7
+      text:
+        enabled: true
+        weight: 8
+      text_image:
+        enabled: true
+        weight: 9
+      video:
+        enabled: true
+        weight: 10
+field_type: entity_reference_revisions

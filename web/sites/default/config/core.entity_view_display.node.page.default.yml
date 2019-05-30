@@ -1,0 +1,23 @@
+uuid: 3ca0c68b-f52b-4c93-865f-de45b0922772
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.page.field_content
+    - field.field.node.page.field_image
+    - node.type.page
+  module:
+    - user
+id: node.page.default
+targetEntityType: node
+bundle: page
+mode: default
+content:
+  links:
+    weight: 100
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  field_content: true
+  field_image: true

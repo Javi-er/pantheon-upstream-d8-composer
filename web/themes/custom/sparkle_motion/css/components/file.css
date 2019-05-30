@@ -1,0 +1,93 @@
+/**
+ * @file
+ * Default style for file module.
+ */
+
+/* File icons.*/
+
+.file {
+  padding-left: 24px; /* LTR */
+  display: inline-block;
+  min-height: 16px;
+  background-image: url(../../images/fa-black/file-o.svg);
+  background-repeat: no-repeat;
+  background-position: left center; /* LTR */
+  background-size: 16px;
+}
+
+[dir="rtl"] .file {
+  padding-left: inherit;
+  padding-right: 24px;
+  background-position: right center;
+}
+
+.file--general,
+.file--application-octet-stream,
+.file-general,
+.file-application-octet-stream {
+  background-image: url(../../images/fa-black/file-o.svg);
+}
+
+.file--package-x-generic,
+.file-package-x-generic {
+  background-image: url(../../images/fa-black/file-archive-o.svg);
+}
+
+.file--x-office-spreadsheet,
+.file-x-office-spreadsheet {
+  background-image: url(../../images/fa-black/file-excel-o.svg);
+}
+
+.file--x-office-document,
+.file-x-office-document {
+  background-image: url(../../images/fa-black/file-word-o.svg);
+}
+
+.file--x-office-presentation,
+.file-x-office-presentation {
+  background-image: url(../../images/fa-black/file-powerpoint-o.svg);
+}
+.file--text-x-script,
+.file-text-x-script {
+  background-image: url(../../images/fa-black/file-code-o.svg);
+}
+
+.file--text-html,
+.file-text-html, {
+  background-image: url(../../images/fa-black/file-code-o.svg);
+}
+
+.file--text-plain,
+.file-text-plain {
+  background-image: url(../../images/fa-black/file-text-o.svg);
+}
+
+.file--application-pdf,
+.file--application-pdf {
+  background-image: url(../../images/fa-black/file-pdf-o.svg);
+}
+
+.file--application-x-executable,
+.file-application-x-executable{
+  background-image: url(../../images/fa-black/file-o.svg);
+}
+
+.file--audio,
+.file-audio {
+  background-image: url(../../images/fa-black/file-audio-o.svg);
+}
+
+.file--video,
+.file-video {
+  background-image: url(../../images/fa-black/file-video-o.svg);
+}
+
+.file--text,
+.file-text {
+  background-image: url(../../images/fa-black/file-text-o.svg);
+}
+
+.file--image,
+.file-image {
+  background-image: url(../../images/fa-black/file-picture-o.svg);
+}

@@ -1,0 +1,20 @@
+uuid: ac5216ef-de15-4fee-9e7a-dd76e52c256e
+langcode: en
+status: true
+dependencies:
+  theme:
+    - westat
+_core:
+  default_config_hash: 13GQpeITIJsp1kyPniXtWZfyFH87vb1xxJCHifL4UeE
+id: westat_local_actions
+theme: westat
+region: content
+weight: 0
+provider: null
+plugin: local_actions_block
+settings:
+  id: local_actions_block
+  label: 'Primary admin actions'
+  provider: core
+  label_display: '0'
+visibility: {  }

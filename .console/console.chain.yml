@@ -1,0 +1,25 @@
+commands:
+  - command: 'generate:module'
+    options:
+        module: Project content types.
+        machine-name: custom_node
+        module-path: /modules/custom
+        description: "Project content types."
+        core: 8.x
+        package: Custom
+  - command: 'generate:entity:bundle'
+    options:
+        module: custom_node
+        bundle-name: page_aggregate
+        bundle-title: Aggregate page
+  - command: 'generate:entity:bundle'
+    options:
+        module: custom_node
+        bundle-name: faq
+        bundle-title: FAQ
+  - command: 'generate:entity:bundle'
+    options:
+        module: custom_node
+        bundle-name: person
+        bundle-title: Person
+

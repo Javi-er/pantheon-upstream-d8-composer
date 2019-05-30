@@ -1,0 +1,24 @@
+uuid: a3c066d4-bdd2-4242-8ac6-6a81c8ab8ca5
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.landing
+    - field.field.node.page.field_content
+    - field.field.node.page.field_image
+    - node.type.page
+  module:
+    - user
+id: node.page.landing
+targetEntityType: node
+bundle: page
+mode: landing
+content:
+  links:
+    weight: 100
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  field_content: true
+  field_image: true

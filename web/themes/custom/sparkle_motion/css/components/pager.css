@@ -1,0 +1,16 @@
+/**
+ * @file
+ * Visual styles for pager.
+ */
+
+.pager-items {
+  clear: both;
+  text-align: center;
+}
+.pager-item {
+  display: inline;
+  padding: 0.5em;
+}
+.pager-item.isActive {
+  font-weight: bold;
+}

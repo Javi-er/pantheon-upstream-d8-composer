@@ -1,0 +1,20 @@
+uuid: 1b409bbe-6c90-44d8-b87e-8feecddee1c7
+langcode: en
+status: true
+dependencies:
+  theme:
+    - sparkle_motion
+_core:
+  default_config_hash: is2A8bD2MNNQDf_e_L_GoTkPROfivYPzSORKBssQxMg
+id: sparkle_motion_page_title
+theme: sparkle_motion
+region: content
+weight: -50
+provider: null
+plugin: page_title_block
+settings:
+  id: page_title_block
+  label: 'Page title'
+  provider: core
+  label_display: '0'
+visibility: {  }

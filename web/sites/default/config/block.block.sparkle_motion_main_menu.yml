@@ -1,0 +1,26 @@
+uuid: dcc1d376-1625-434b-ad48-785b484613b2
+langcode: en
+status: false
+dependencies:
+  config:
+    - system.menu.main
+  module:
+    - system
+  theme:
+    - sparkle_motion
+_core:
+  default_config_hash: 2JWmirFw6JjVVGr9_M33cFNwhsxeQ0tO5yizlKPfK68
+id: sparkle_motion_main_menu
+theme: sparkle_motion
+region: header
+weight: 0
+provider: null
+plugin: 'system_menu_block:main'
+settings:
+  id: 'system_menu_block:main'
+  label: 'Main navigation'
+  provider: system
+  label_display: '0'
+  level: 1
+  depth: 1
+visibility: {  }

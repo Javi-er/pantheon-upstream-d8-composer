@@ -1,0 +1,22 @@
+uuid: fb0541fb-0a4f-40c4-8262-8c162c5ff3cc
+langcode: en
+status: true
+dependencies:
+  theme:
+    - westat
+_core:
+  default_config_hash: X9I1OB0W3WlWtrK-CNcg6hNWwa8wficanpH8pYnDZDE
+id: westat_local_tasks
+theme: westat
+region: content
+weight: -1
+provider: null
+plugin: local_tasks_block
+settings:
+  id: local_tasks_block
+  label: Tabs
+  provider: core
+  label_display: '0'
+  primary: true
+  secondary: true
+visibility: {  }

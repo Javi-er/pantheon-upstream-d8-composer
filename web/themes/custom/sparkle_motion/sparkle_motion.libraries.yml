@@ -1,0 +1,153 @@
+#  Global library
+global:
+  version: 1.0
+  css:
+    theme:
+      css/sparkle_motion.css: { weight: -10 }
+  js:
+    js/sparkle_motion.js: { minified: false, weight: -10 }
+  dependencies:
+    - core/drupal
+    - core/jquery
+
+
+# overrides for classy/base
+base:
+  version: VERSION
+  css:
+    component:
+      css/components/action-links.css: { weight: -5 }
+      css/components/button.css: { weight: -5 }
+      css/components/container-inline.css: { weight: -5 }
+      css/components/details.css: { weight: -5 }
+      css/components/exposed-filters.css: { weight: -5 }
+      css/components/field.css: { weight: -5 }
+      css/components/form.css: { weight: -5 }
+      css/components/icons.css: { weight: -5 }
+      css/components/inline-form.css: { weight: -5 }
+      css/components/item-list.css: { weight: -5 }
+      css/components/link.css: { weight: -5 }
+      css/components/links.css: { weight: -5 }
+      css/components/menu.css: { weight: -5 }
+      css/components/more-link.css: { weight: -5 }
+      css/components/pager.css: { weight: -5 }
+      css/components/tablesort.css: { weight: -5 }
+      css/components/tabs.css: { weight: -5 }
+      css/components/textarea.css: { weight: -5 }
+
+
+jquery:
+  remote: https://github.com/jquery/jquery
+  version: "3.3.1"
+  license:
+    name: MIT
+    url: https://github.com/jquery/jquery/blob/3.3.1/LICENSE.txt
+    gpl-compatible: true
+  js:
+    js/vendor/jquery-3.3.1.min.js: { minified: true, weight: -20 }
+
+
+normalize:
+  remote: https://github.com/necolas/normalize.css
+  version: "7.0.0"
+  license:
+    name: MIT
+    url: https://github.com/necolas/normalize.css/blob/master/LICENSE.md
+    gpl-compatible: true
+  css:
+    base:
+      css/normalize.css: { weight: -10 }
+
+
+jquery-throttle-debounce:
+  remote: https://github.com/cowboy/jquery-throttle-debounce
+  version: "1.1"
+  license:
+    name: MIT
+    url: https://github.com/cowboy/jquery-throttle-debounce/blob/master/LICENSE-MIT
+    gpl-compatible: true
+  js:
+    js/vendor/jquery-throttle-debounce.min.js: { minified: true, weight: -5 }
+
+
+what-input:
+  remote: https://github.com/ten1seven/what-input
+  version: "5.0.5"
+  license:
+    name: MIT
+    url: https://github.com/ten1seven/what-input/blob/master/LICENSE
+    gpl-compatible: true
+  js:
+    js/vendor/what-input.min.js: { minified: true, weight: -5 }
+
+
+jquery.visible:
+  remote: https://github.com/customd/jquery-visible/
+  version: "v1.3.0"
+  license:
+    url: https://github.com/customd/jquery-visible/blob/master/LICENSE.txt
+    gpl-compatible: true
+  js:
+      js/vendor/jquery.visible.min.js: { minified: true, weight: -3 }
+
+
+# more classy overrides
+book-navigation:
+  version: VERSION
+  css:
+    component:
+      css/components/book-navigation.css: { weight: -5 }
+
+dialog:
+  version: VERSION
+  css:
+    component:
+      css/components/dialog.css: { weight: -5 }
+
+dropbutton:
+  version: VERSION
+  css:
+    component:
+      css/components/dropbutton.css: { weight: -5 }
+
+file:
+  version: VERSION
+  css:
+    component:
+      css/components/file.css: { weight: -5 }
+
+forum:
+  version: VERSION
+  css:
+    component:
+      css/components/forum.css: { weight: -5 }
+
+indented:
+  version: VERSION
+  css:
+    component:
+      css/components/indented.css: { weight: -5 }
+
+messages:
+  version: VERSION
+  css:
+    component:
+      css/components/messages.css: { weight: -5 }
+
+node:
+  version: VERSION
+  css:
+    component:
+      css/components/node.css: { weight: -5 }
+
+progress:
+  version: VERSION
+  css:
+    component:
+      css/components/progress.css: { weight: -5 }
+
+search-results:
+  version: VERSION
+  css:
+    component:
+      css/components/search-results.css: { weight: -5 }

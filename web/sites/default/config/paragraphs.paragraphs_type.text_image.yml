@@ -1,0 +1,7 @@
+uuid: 0029fdd5-a76b-487b-94c8-cfc323733aa6
+langcode: en
+status: true
+dependencies: {  }
+id: text_image
+label: 'Text and Image'
+behavior_plugins: {  }

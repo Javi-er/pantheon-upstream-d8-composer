@@ -1,0 +1,14 @@
+// this is a hack to force the toolbar tray to stick
+// to the toolbar bar itself when it turns into
+// a vertical strip on the left of the viewport.
+//
+// instead of forcing content below to the right
+// and disconnecting form the toolbar bar when
+// scrolled down. -JE
+.toolbar-vertical {
+  margin-left: 0 !important;
+
+  .toolbar-bar {
+    position: fixed;
+  }
+}

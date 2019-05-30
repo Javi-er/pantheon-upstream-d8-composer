@@ -1,0 +1,22 @@
+uuid: c964a8a6-ff45-4a71-8976-f9d727986100
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - sparkle_motion
+_core:
+  default_config_hash: aWivrQw1FUmnvkK-n1KSnBhpimR22ImaAtiNqo4QPmw
+id: sparkle_motion_content
+theme: sparkle_motion
+region: content
+weight: 0
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: 'Main page content'
+  provider: system
+  label_display: '0'
+visibility: {  }
