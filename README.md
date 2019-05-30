@@ -42,6 +42,7 @@ Select the OS applicable to your local environment
 ### Install Lando
 https://docs.devwithlando.io/installation/system-requirements.html
 Again, choose the OS that is applicable for your local environment
+This guide is tested with "v3.0.0-rc.16" and works but latest stable release should be dandy.
 
 ### Trust the lndo.site Ceritificate Authority
 https://docs.devwithlando.io/config/security.html
