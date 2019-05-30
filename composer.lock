@@ -1377,7 +1377,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.27",
-                    "datestamp": "1558552081",
+                    "datestamp": "1558553350",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2722,7 +2722,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/inline_entity_form.git",
-                "reference": "bb2d49cb6220ceacc9e5da1fb89d3ef2627fb604"
+                "reference": "8c8a0e1f165c16090ceb2cdfe84ec51ca18b75bd"
             },
             "require": {
                 "drupal/core": "^8.5"
@@ -2736,8 +2736,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-rc1+4-dev",
-                    "datestamp": "1557148081",
+                    "version": "8.x-1.0-rc1+5-dev",
+                    "datestamp": "1559120881",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -2783,7 +2783,7 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/inline_entity_form"
             },
-            "time": "2019-05-29T09:03:06+00:00"
+            "time": "2019-05-30T16:29:16+00:00"
         },
         {
             "name": "drupal/metatag",
@@ -7138,6 +7138,17 @@
         {
             "name": "webflo/drupal-core-strict",
             "version": "8.7.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/webflo/drupal-core-strict.git",
+                "reference": "e1776e6ba94495ae586803259857d1d28ad1c7a8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/webflo/drupal-core-strict/zipball/e1776e6ba94495ae586803259857d1d28ad1c7a8",
+                "reference": "e1776e6ba94495ae586803259857d1d28ad1c7a8",
+                "shasum": ""
+            },
             "require": {
                 "asm89/stack-cors": "1.2.0",
                 "brumann/polyfill-unserialize": "v1.0.3",

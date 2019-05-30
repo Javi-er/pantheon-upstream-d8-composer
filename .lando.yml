@@ -5,3 +5,8 @@ config:
   site: composer-workbench
   id: b6f371ff-d036-4bf6-a57b-6f2c73763add
   xdebug: true
+events:
+  pre-start:
+    - composer install
+  post-db-import:
+    - appserver: drush cc all -y

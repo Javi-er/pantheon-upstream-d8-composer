@@ -8,6 +8,34 @@ namespace Drupal\taoti_helper;
 class TwigExtension extends \Twig_Extension {
 
   /**
+   * Entity type manager object.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManager
+   */
+  public $entityTypeManager;
+
+  /**
+   * Current route match object.
+   *
+   * @var \Drupal\Core\Routing\CurrentRouteMatch
+   */
+  public $routeMatch;
+
+
+  /**
+   * TwigExtension constructor.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity_type_manager
+   *   Entity type manager object.
+   * @param \Drupal\Core\Routing\CurrentRouteMatch $route_match
+   *   Current route match object.
+   */
+  public function __construct($entity_type_manager, $route_match) {
+    $this->entityTypeManager = $entity_type_manager;
+    $this->routeMatch = $route_match;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function getName() {
@@ -50,8 +78,8 @@ class TwigExtension extends \Twig_Extension {
   public function isEmpty($field_name, $entity_type, $id = NULL, $view_mode = 'default', $langcode = NULL) {
     /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
     $entity = $id
-      ? \Drupal::entityTypeManager()->getStorage($entity_type)->load($id)
-      : \Drupal::routeMatch()->getParameter($entity_type);
+      ? $this->entityTypeManager->getStorage($entity_type)->load($id)
+      : $this->routeMatch->getParameter($entity_type);
 
     if (!empty($entity)) {
       if ($langcode && $entity->hasTranslation($langcode)) {
