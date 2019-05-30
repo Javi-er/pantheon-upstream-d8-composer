@@ -44,6 +44,10 @@ You want the one that ends with .lndo.site (https://composer-workbench.lndo.site
 *Dev away!*
 
 # Create a new site
+## Prerequisite -- Install Terminus Build Tools Plugin
+https://github.com/pantheon-systems/terminus-build-tools-plugin#installing-build-tools-2x
+
+## Initialize Site Repository
 - Clone the Taoti composer upstream to your local. It should be located at https://github.com/Taoti/pantheon-upstream-d8-composer . Use the clone command to name your new site to match the variable your about to use for \[NEW-MACHINE-SITE-NAME\] below. (e.x. `git clone https://github.com/Taoti/pantheon-upstream-d8-composer.git my-new-site` ). 'my-new-site' will place this in a directory matching your new site name
 - Remove the git origin remote, this is important to do because the next command we run is going to establish the git remote and do everything else for us. `$ git remote remove origin`
 - Run the following command to get everything started with GitHub, CircleCI and Pantheon:
