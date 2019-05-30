@@ -53,7 +53,7 @@
 }
 
 .file--text-html,
-.file-text-html, {
+.file-text-html {
   background-image: url(../../images/fa-black/file-code-o.svg);
 }
 
@@ -68,7 +68,7 @@
 }
 
 .file--application-x-executable,
-.file-application-x-executable{
+.file-application-x-executable {
   background-image: url(../../images/fa-black/file-o.svg);
 }
 
