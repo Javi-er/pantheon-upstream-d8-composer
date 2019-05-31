@@ -1,4 +1,5 @@
-# composer-workbench
+# Composer Upstream
+The source of truth and where to begin at Taoti when creating composer-based website builds.
 
 [![CircleCI](https://circleci.com/gh/traverus/composer-workbench.svg?style=shield)](https://circleci.com/gh/traverus/composer-workbench)
 [![Dashboard composer-workbench](https://img.shields.io/badge/dashboard-composer_workbench-yellow.svg)](https://dashboard.pantheon.io/sites/b6f371ff-d036-4bf6-a57b-6f2c73763add#dev/code)
@@ -32,11 +33,11 @@ Here are some vitals:
  APPSERVER_NGINX URLS  https://localhost:32772                                            
                        http://localhost:32773                                             
  EDGE URLS             http://localhost:32775                                             
-                       http://composer-workbench.lndo.site:8000                           
-                       https://composer-workbench.lndo.site                               
+                       http://example.lndo.site:8000                           
+                       https://example.lndo.site                               
  EDGE_SSL URLS         https://localhost:32776                                            
 ```
-You want the one that ends with .lndo.site (https://composer-workbench.lndo.site in this example). Some of these other URLs might be useful if you're having caching issues.
+You want the one that ends with .lndo.site (https://example.lndo.site in this example). Some of these other URLs might be useful if you're having caching issues.
 
 *Dev away!*
 
