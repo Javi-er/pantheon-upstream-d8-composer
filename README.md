@@ -17,6 +17,7 @@ Clone the repo, dawg!
 ## Get the Local Server Running with Lando
 Run: `$ lando start` in your command prompt, in the root of the repository
 *The above command will compile all the composer dependencies for you on your local* 
+*After you start Lando for the first time, make sure to trust the lndo.site Ceritificate Authority. Instructions at the bottom.*
 
 If all is successful, it should spit out a number of urls that look similar to this:
 ```
@@ -97,4 +98,5 @@ Again, choose the OS that is applicable for your local environment
 This guide is tested with "v3.0.0-rc.16" and works but latest stable release should be dandy.
 
 ### Trust the lndo.site Ceritificate Authority
+After you have started Lando the first time, follow these
 https://docs.devwithlando.io/config/security.html
